@@ -1,15 +1,31 @@
+import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-export default function SingleSnippetPage({ snippets, deleteSnippet }) {
+import axios from 'axios';
+import { url } from '../App';
+
+export default function SingleSnippetPage({ deleteSnippet }) {
+  const [snippet, setSnippet] = useState(null);
   const { id } = useParams();
 
-  const snippet = snippets.find((snippet) => snippet.id == id);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get(`${url}/${id}`);
+        setSnippet(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, [id]);
 
   const navigate = useNavigate();
 
   if (!snippet) {
-    return <div>Snippet not found</div>;
+    return <div>Loading...</div>;
   }
 
   return (
@@ -38,19 +54,26 @@ export default function SingleSnippetPage({ snippets, deleteSnippet }) {
         </div>
       </div>
 
-      <pre className="p-3 border rounded bg-gray-200 border-gray-200 relative">
-        <code>{snippet.code}</code>
+      <div className="flex flex-col gap-6">
+        {snippet?.steps?.map((step) => (
+          <div key={step._id} className="flex flex-col gap-2">
+            <h2>{step.stepTitle}</h2>
+            <pre className="p-3 border rounded bg-gray-200 border-gray-200 relative">
+              <code>{step.stepCode}</code>
 
-        <button
-          onClick={() => {
-            navigator.clipboard.writeText(snippet.code);
-            toast.success('Code copied to clipboard');
-          }}
-          className="p-2 border bg-slate-400 rounded absolute right-4 top-4"
-        >
-          Copy
-        </button>
-      </pre>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(step.code);
+                  toast.success('Code copied to clipboard');
+                }}
+                className="text-white font-bold p-2 border bg-slate-400 rounded absolute right-4 top-4 text-xs"
+              >
+                Copy
+              </button>
+            </pre>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

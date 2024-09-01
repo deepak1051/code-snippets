@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import EditSnippet from './pages/EditSnippet';
 import axios from 'axios';
 
-const url = 'http://localhost:5000/api/snippets';
+export const url = 'http://localhost:5000/api/snippets';
 
 function App() {
   const [snippets, setSnippets] = useState(
@@ -19,6 +19,8 @@ function App() {
       try {
         const { data } = await axios.get(url);
         console.log(data);
+
+        setSnippets(data);
       } catch (error) {
         console.log(error);
       }
@@ -27,7 +29,13 @@ function App() {
     fetchData();
   }, []);
 
-  const createSnippet = (snippet) => {
+  const createSnippet = async (snippet) => {
+    try {
+      const { data } = await axios.post(url, snippet);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
     setSnippets([...snippets, snippet]);
   };
 
