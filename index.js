@@ -3,6 +3,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import snippetRoutes from './routes/snippets.route.js';
 import cors from 'cors';
+import path from 'path';
 
 mongoose
   .connect(process.env.MONGO_URI)
