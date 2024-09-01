@@ -36,13 +36,16 @@ function App() {
     } catch (error) {
       console.log(error);
     }
-    setSnippets([...snippets, snippet]);
+    // setSnippets([...snippets, snippet]);
   };
 
-  const editSnippet = (snippet) => {
-    setSnippets((prev) => prev.map((s) => (s.id === snippet.id ? snippet : s)));
-
-    // setSnippets([...snippets, snippet]);
+  const editSnippet = async (snippet) => {
+    try {
+      const { data } = await axios.put(`${url}/${snippet._id}`, snippet);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const deleteSnippet = (id) => {

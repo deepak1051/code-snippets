@@ -35,7 +35,7 @@ export default function SingleSnippetPage({ deleteSnippet }) {
 
         <div className="flex gap-4">
           <Link
-            to={`/snippets/${snippet.id}/edit`}
+            to={`/snippets/${snippet._id}/edit`}
             className="p-2 border rounded"
           >
             Edit
@@ -43,7 +43,7 @@ export default function SingleSnippetPage({ deleteSnippet }) {
           <div>
             <button
               onClick={() => {
-                deleteSnippet(snippet.id);
+                deleteSnippet(snippet._id);
                 navigate('/');
               }}
               className="p-2 border rounded"
