@@ -7,7 +7,8 @@ import { useEffect, useState } from 'react';
 import EditSnippet from './pages/EditSnippet';
 import axios from 'axios';
 
-export const url = 'http://localhost:5000/api/snippets';
+export const url = '/api/snippets';
+// export const url = 'http://localhost:5000/api/snippets';
 
 function App() {
   const [snippets, setSnippets] = useState(
