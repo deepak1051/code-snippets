@@ -5,11 +5,27 @@ import CreateSnippet from './pages/CreateSnippet';
 import Header from './components/Header';
 import { useEffect, useState } from 'react';
 import EditSnippet from './pages/EditSnippet';
+import axios from 'axios';
+
+const url = 'http://localhost:5000/api/snippets';
 
 function App() {
   const [snippets, setSnippets] = useState(
     JSON.parse(localStorage.getItem('snippets')) || []
   );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get(url);
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const createSnippet = (snippet) => {
     setSnippets([...snippets, snippet]);
