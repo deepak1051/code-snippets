@@ -82,8 +82,11 @@ export default function EditSnippet({ editSnippet }) {
 
         <div className="flex flex-col gap-4">
           {steps.map((item) => (
-            <div key={item.id} className="border border-teal-400 p-2 rounded">
-              <div className="flex gap-4 mb-2">
+            <div
+              key={item.id}
+              className="border bg-gray-400 shadow-lg  p-2 rounded"
+            >
+              <div className="flex gap-4 mb-2 items-center">
                 <label className="whitespace-nowrap" htmlFor="title">
                   step title
                 </label>
@@ -101,12 +104,11 @@ export default function EditSnippet({ editSnippet }) {
 
               <div className="flex gap-4">
                 <Editor
-                  height="40vh"
+                  height="30vh"
                   theme="vs-dark"
                   language="javascript"
                   defaultValue={item.stepCode}
                   options={{ minimap: { enabled: false } }}
-                  // onChange={(code) => setCode(code)}
                   onChange={(code) => handleChangeStepCode(code, item.id)}
                 />
               </div>
@@ -114,7 +116,11 @@ export default function EditSnippet({ editSnippet }) {
           ))}
         </div>
 
-        <button type="button" onClick={handleAddMore}>
+        <button
+          className="p-2 rounded-md border bg-slate-50 "
+          type="button"
+          onClick={handleAddMore}
+        >
           Add More
         </button>
 
@@ -125,16 +131,14 @@ export default function EditSnippet({ editSnippet }) {
         ) : null}
       </div>
 
-      <div>
-        <form className="mt-4" onSubmit={handleSubmit}>
-          <button
-            type="submit"
-            className="bg-indigo-500 text-white p-2 border rounded "
-          >
-            Save
-          </button>
-        </form>
-      </div>
+      <form className="mt-4 flex items-center w-full" onSubmit={handleSubmit}>
+        <button
+          type="submit"
+          className="w-full bg-indigo-800 text-white p-2 border rounded "
+        >
+          Save
+        </button>
+      </form>
     </div>
   );
 }

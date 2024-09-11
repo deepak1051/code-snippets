@@ -7,8 +7,8 @@ import { useEffect, useState } from 'react';
 import EditSnippet from './pages/EditSnippet';
 import axios from 'axios';
 
-export const url = '/api/snippets';
-// export const url = 'http://localhost:5000/api/snippets';
+// export const url = '/api/snippets';
+export const url = 'http://localhost:5000/api/snippets';
 
 function App() {
   const [snippets, setSnippets] = useState(
@@ -37,7 +37,6 @@ function App() {
     } catch (error) {
       console.log(error);
     }
-    // setSnippets([...snippets, snippet]);
   };
 
   const editSnippet = async (snippet) => {
@@ -53,9 +52,9 @@ function App() {
     setSnippets((prev) => prev.filter((s) => s.id !== id));
   };
 
-  useEffect(() => {
-    localStorage.setItem('snippets', JSON.stringify(snippets));
-  }, [snippets]);
+  // useEffect(() => {
+  //   localStorage.setItem('snippets', JSON.stringify(snippets));
+  // }, [snippets]);
 
   return (
     <BrowserRouter>

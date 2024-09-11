@@ -63,7 +63,7 @@ export default function SingleSnippetPage({ deleteSnippet }) {
 
               <button
                 onClick={() => {
-                  navigator.clipboard.writeText(step.code);
+                  navigator.clipboard.writeText(step.stepCode);
                   toast.success('Code copied to clipboard');
                 }}
                 className="text-white font-bold p-2 border bg-slate-400 rounded absolute right-4 top-4 text-xs"
