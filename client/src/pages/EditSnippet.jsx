@@ -7,6 +7,11 @@ import { nanoid } from 'nanoid';
 import { MdDelete } from 'react-icons/md';
 import { CiSquareChevDown, CiSquareChevUp } from 'react-icons/ci';
 
+const STEP_ADD_TYPE = {
+  UP: 'UP',
+  DOWN: 'DOWN',
+};
+
 export default function EditSnippet({ editSnippet }) {
   const { id } = useParams();
 
@@ -21,7 +26,7 @@ export default function EditSnippet({ editSnippet }) {
       try {
         const { data } = await axios.get(`${url}/${id}`);
         setTitle(data.title);
-        setSteps(data.steps);
+        setSteps(data.steps.map((item) => ({ ...item, id: item._id })));
       } catch (error) {
         console.log(error);
       }
@@ -44,11 +49,38 @@ export default function EditSnippet({ editSnippet }) {
     navigate('/');
   };
 
-  const handleAddMore = () => {
-    setSteps((prev) => [
-      ...prev,
-      { stepTitle: '', stepCode: '', id: nanoid() },
-    ]);
+  const handleAddMore = (id = null, type = null) => {
+    if (!id || !type) {
+      setSteps((prev) => [
+        ...prev,
+        { stepTitle: '', stepCode: '', id: nanoid() },
+      ]);
+      return;
+    }
+
+    const stepIndex = steps.findIndex((item) => item.id === id);
+
+    console.log(stepIndex);
+
+    if (type === STEP_ADD_TYPE.UP) {
+      setSteps((prev) => {
+        return [
+          ...prev.slice(0, stepIndex),
+          { stepTitle: '', stepCode: '', id: nanoid() },
+          ...prev.slice(stepIndex),
+        ];
+      });
+    }
+
+    if (type === STEP_ADD_TYPE.DOWN) {
+      setSteps((prev) => {
+        return [
+          ...prev.slice(0, stepIndex + 1),
+          { stepTitle: '', stepCode: '', id: nanoid() },
+          ...prev.slice(stepIndex + 1),
+        ];
+      });
+    }
   };
 
   const handleChangeStepTitle = (value, id) => {
@@ -63,6 +95,12 @@ export default function EditSnippet({ editSnippet }) {
     setSteps((prev) =>
       prev.map((step) => (step.id === id ? { ...step, stepCode: value } : step))
     );
+  };
+
+  const handleDeleteStep = (id) => {
+    if (window.confirm('Are you sure you want to delete this code step')) {
+      setSteps((prev) => prev.filter((step) => step.id !== id));
+    }
   };
 
   return (
@@ -88,15 +126,15 @@ export default function EditSnippet({ editSnippet }) {
               key={item.id}
               className=" flex gap-2 border bg-gray-400 shadow-lg  p-2 rounded "
             >
-              <div className="flex-1">
+              <div className="flex-1 flex flex-col">
                 <div className="flex gap-4 mb-2 items-center">
                   <label className="whitespace-nowrap" htmlFor="title">
-                    step title
+                    step title {item.id}
                   </label>
                   <input
                     type="text"
                     name="title"
-                    className="border rounded p-2 w-full"
+                    className="border rounded p-2 w-full "
                     id="title"
                     value={item.stepTitle}
                     onChange={(e) =>
@@ -105,7 +143,7 @@ export default function EditSnippet({ editSnippet }) {
                   />
                 </div>
 
-                <div className="flex gap-4">
+                <div className="flex gap-4  flex-1">
                   <Editor
                     height="30vh"
                     theme="vs-dark"
@@ -117,18 +155,26 @@ export default function EditSnippet({ editSnippet }) {
                 </div>
               </div>
 
-              <div className="flex flex-col items-center">
-                <button type="button" className="p-2 rounded border  h-8">
-                  <CiSquareChevUp />
+              <div className="flex flex-col items-center gap-4">
+                <button
+                  onClick={() => handleAddMore(item.id, STEP_ADD_TYPE.UP)}
+                  type="button"
+                  className="p-2 rounded   h-8 bg-blue-800 flex items-center justify-center"
+                >
+                  <CiSquareChevUp size={20} color="white" />
                 </button>
 
-                <button type="button" className="p-2 rounded border  h-8">
-                  <CiSquareChevDown />
+                <button
+                  onClick={() => handleAddMore(item.id, STEP_ADD_TYPE.DOWN)}
+                  type="button"
+                  className="p-2 rounded   h-8  bg-blue-800 flex items-center justify-center"
+                >
+                  <CiSquareChevDown size={20} color="white" />
                 </button>
                 <button
-                  // onClick={() => handleDelete(item.id)}
+                  onClick={() => handleDeleteStep(item.id)}
                   type="button"
-                  className="p-2 rounded border  h-8"
+                  className="p-2 rounded   h-8 bg-white flex items-center justify-center"
                 >
                   <MdDelete size={20} color="red" />
                 </button>
