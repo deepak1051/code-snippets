@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { nanoid } from 'nanoid';
+import { MdDelete } from 'react-icons/md';
 
 export default function CreateSnippet({ createSnippet }) {
   const [title, setTitle] = useState('');
@@ -41,6 +42,10 @@ export default function CreateSnippet({ createSnippet }) {
     );
   };
 
+  const handleDelete = (id) => {
+    setSteps((prev) => prev.filter((item) => item.id != id));
+  };
+
   return (
     <div className="container mx-auto p-4 max-w-4xl">
       <form onSubmit={handleSubmit}>
@@ -66,39 +71,48 @@ export default function CreateSnippet({ createSnippet }) {
             {steps.map((item) => (
               <div
                 key={item.id}
-                className=" bg-gray-300 shadow-lg  border p-2 rounded"
+                className="relative bg-gray-300 shadow-lg  border p-2 rounded flex gap-2"
               >
-                <div className="flex gap-4 mb-2">
-                  <label className="whitespace-nowrap" htmlFor="title">
-                    step title
-                  </label>
-                  <input
-                    type="text"
-                    name="title"
-                    className="border rounded p-2 w-full"
-                    id="title"
-                    value={item.stepTitle}
-                    onChange={(e) =>
-                      handleChangeStepTitle(e.target.value, item.id)
-                    }
-                  />
-                </div>
+                <div className="flex-1">
+                  <div className="flex gap-4 mb-2">
+                    <label className="whitespace-nowrap" htmlFor="title">
+                      step title
+                    </label>
+                    <input
+                      type="text"
+                      name="title"
+                      className="border rounded p-2 w-full"
+                      id="title"
+                      value={item.stepTitle}
+                      onChange={(e) =>
+                        handleChangeStepTitle(e.target.value, item.id)
+                      }
+                    />
+                  </div>
 
-                <div className="flex gap-4">
-                  <label className="whitespace-nowrap" htmlFor="code">
-                    step code
-                  </label>
-                  <textarea
-                    name="code"
-                    className="border rounded p-2 w-full"
-                    id="code"
-                    value={item.stepCode}
-                    onChange={(e) =>
-                      handleChangeStepCode(e.target.value, item.id)
-                    }
-                    rows={4}
-                  />
+                  <div className="flex gap-4">
+                    <label className="whitespace-nowrap" htmlFor="code">
+                      step code
+                    </label>
+                    <textarea
+                      name="code"
+                      className="border rounded p-2 w-full"
+                      id="code"
+                      value={item.stepCode}
+                      onChange={(e) =>
+                        handleChangeStepCode(e.target.value, item.id)
+                      }
+                      rows={4}
+                    />
+                  </div>
                 </div>
+                <button
+                  onClick={() => handleDelete(item.id)}
+                  type="button"
+                  className="p-2 rounded border  h-16"
+                >
+                  <MdDelete size={24} color="red" />
+                </button>
               </div>
             ))}
           </div>

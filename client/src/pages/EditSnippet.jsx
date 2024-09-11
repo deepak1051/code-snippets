@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { url } from '../App';
 import { nanoid } from 'nanoid';
+import { MdDelete } from 'react-icons/md';
+import { CiSquareChevDown, CiSquareChevUp } from 'react-icons/ci';
 
 export default function EditSnippet({ editSnippet }) {
   const { id } = useParams();
@@ -84,33 +86,52 @@ export default function EditSnippet({ editSnippet }) {
           {steps.map((item) => (
             <div
               key={item.id}
-              className="border bg-gray-400 shadow-lg  p-2 rounded"
+              className=" flex gap-2 border bg-gray-400 shadow-lg  p-2 rounded "
             >
-              <div className="flex gap-4 mb-2 items-center">
-                <label className="whitespace-nowrap" htmlFor="title">
-                  step title
-                </label>
-                <input
-                  type="text"
-                  name="title"
-                  className="border rounded p-2 w-full"
-                  id="title"
-                  value={item.stepTitle}
-                  onChange={(e) =>
-                    handleChangeStepTitle(e.target.value, item.id)
-                  }
-                />
+              <div className="flex-1">
+                <div className="flex gap-4 mb-2 items-center">
+                  <label className="whitespace-nowrap" htmlFor="title">
+                    step title
+                  </label>
+                  <input
+                    type="text"
+                    name="title"
+                    className="border rounded p-2 w-full"
+                    id="title"
+                    value={item.stepTitle}
+                    onChange={(e) =>
+                      handleChangeStepTitle(e.target.value, item.id)
+                    }
+                  />
+                </div>
+
+                <div className="flex gap-4">
+                  <Editor
+                    height="30vh"
+                    theme="vs-dark"
+                    language="javascript"
+                    defaultValue={item.stepCode}
+                    options={{ minimap: { enabled: false } }}
+                    onChange={(code) => handleChangeStepCode(code, item.id)}
+                  />
+                </div>
               </div>
 
-              <div className="flex gap-4">
-                <Editor
-                  height="30vh"
-                  theme="vs-dark"
-                  language="javascript"
-                  defaultValue={item.stepCode}
-                  options={{ minimap: { enabled: false } }}
-                  onChange={(code) => handleChangeStepCode(code, item.id)}
-                />
+              <div className="flex flex-col items-center">
+                <button type="button" className="p-2 rounded border  h-8">
+                  <CiSquareChevUp />
+                </button>
+
+                <button type="button" className="p-2 rounded border  h-8">
+                  <CiSquareChevDown />
+                </button>
+                <button
+                  // onClick={() => handleDelete(item.id)}
+                  type="button"
+                  className="p-2 rounded border  h-8"
+                >
+                  <MdDelete size={20} color="red" />
+                </button>
               </div>
             </div>
           ))}
