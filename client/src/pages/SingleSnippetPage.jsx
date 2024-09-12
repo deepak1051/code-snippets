@@ -24,6 +24,13 @@ export default function SingleSnippetPage({ deleteSnippet }) {
 
   const navigate = useNavigate();
 
+  const handleDelete = async (id) => {
+    if (window.confirm('you really want to delete this snippet')) {
+      await deleteSnippet(id);
+      navigate('/');
+    }
+  };
+
   if (!snippet) {
     return <div>Loading...</div>;
   }
@@ -42,10 +49,7 @@ export default function SingleSnippetPage({ deleteSnippet }) {
           </Link>
           <div>
             <button
-              onClick={() => {
-                deleteSnippet(snippet._id);
-                navigate('/');
-              }}
+              onClick={async () => handleDelete(snippet._id)}
               className="p-2 border rounded"
             >
               Delete

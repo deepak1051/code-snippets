@@ -60,8 +60,6 @@ export default function EditSnippet({ editSnippet }) {
 
     const stepIndex = steps.findIndex((item) => item.id === id);
 
-    console.log(stepIndex);
-
     if (type === STEP_ADD_TYPE.UP) {
       setSteps((prev) => {
         return [
@@ -129,7 +127,7 @@ export default function EditSnippet({ editSnippet }) {
               <div className="flex-1 flex flex-col">
                 <div className="flex gap-4 mb-2 items-center">
                   <label className="whitespace-nowrap" htmlFor="title">
-                    step title {item.id}
+                    step title
                   </label>
                   <input
                     type="text"

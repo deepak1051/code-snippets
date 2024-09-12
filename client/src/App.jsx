@@ -3,7 +3,7 @@ import Homepage from './pages/Homepage';
 import SingleSnippetPage from './pages/SingleSnippetPage';
 import CreateSnippet from './pages/CreateSnippet';
 import Header from './components/Header';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import EditSnippet from './pages/EditSnippet';
 import axios from 'axios';
 
@@ -11,24 +11,21 @@ import axios from 'axios';
 export const url = 'http://localhost:5000/api/snippets';
 
 function App() {
-  const [snippets, setSnippets] = useState(
-    JSON.parse(localStorage.getItem('snippets')) || []
-  );
+  const [snippets, setSnippets] = useState([]);
+
+  const fetchData = useCallback(async () => {
+    try {
+      const { data } = await axios.get(url);
+
+      setSnippets(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await axios.get(url);
-        console.log(data);
-
-        setSnippets(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const createSnippet = async (snippet) => {
     try {
@@ -48,13 +45,14 @@ function App() {
     }
   };
 
-  const deleteSnippet = (id) => {
-    setSnippets((prev) => prev.filter((s) => s.id !== id));
+  const deleteSnippet = async (id) => {
+    try {
+      await axios.delete(`${url}/${id}`);
+      await fetchData();
+    } catch (error) {
+      console.log(error);
+    }
   };
-
-  // useEffect(() => {
-  //   localStorage.setItem('snippets', JSON.stringify(snippets));
-  // }, [snippets]);
 
   return (
     <BrowserRouter>

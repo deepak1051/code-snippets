@@ -10,14 +10,14 @@ export default function CreateSnippet({ createSnippet }) {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     if (!title || steps.length === 0) {
       setError('Please add a title and steps');
       return;
     }
-    createSnippet({ title, steps });
+    await createSnippet({ title, steps });
     navigate('/');
   };
 

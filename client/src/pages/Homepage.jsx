@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 
 export default function Homepage({ snippets }) {
-  console.log(snippets);
   return (
     <div className="container mx-auto p-4 max-w-4xl">
       <div className="mt-6 flex flex-col gap-2">
