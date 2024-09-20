@@ -1,26 +1,17 @@
-import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import axios from 'axios';
-import { url } from '../App';
+
+import { useQuery } from '@tanstack/react-query';
 
 export default function SingleSnippetPage({ deleteSnippet }) {
-  const [snippet, setSnippet] = useState(null);
   const { id } = useParams();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await axios.get(`${url}/${id}`);
-        setSnippet(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
-  }, [id]);
+  const { data, isPending, isError, error } = useQuery({
+    queryKey: ['snippets', id],
+    queryFn: () => axios.get(`/api/snippets/${id}`).then((res) => res.data),
+  });
 
   const navigate = useNavigate();
 
@@ -31,25 +22,27 @@ export default function SingleSnippetPage({ deleteSnippet }) {
     }
   };
 
-  if (!snippet) {
+  if (isPending) {
     return <div>Loading...</div>;
   }
+
+  if (isError) return <div>{error.toString()}</div>;
 
   return (
     <div className="m-4 container mx-auto px-4 max-w-4xl">
       <div className="flex my-4 justify-between items-center">
-        <h1 className="text-xl font-bold text-indigo-400">{snippet.title}</h1>
+        <h1 className="text-xl font-bold text-indigo-400">{data.title}</h1>
 
         <div className="flex gap-4">
           <Link
-            to={`/snippets/${snippet._id}/edit`}
+            to={`/snippets/${data._id}/edit`}
             className="p-2 border rounded"
           >
             Edit
           </Link>
           <div>
             <button
-              onClick={async () => handleDelete(snippet._id)}
+              onClick={async () => handleDelete(data._id)}
               className="p-2 border rounded"
             >
               Delete
@@ -59,7 +52,7 @@ export default function SingleSnippetPage({ deleteSnippet }) {
       </div>
 
       <div className="flex flex-col gap-6">
-        {snippet?.steps?.map((step) => (
+        {data?.steps?.map((step) => (
           <div key={step._id} className="flex flex-col gap-2">
             <h2>{step.stepTitle}</h2>
             <pre className="p-3 border rounded bg-gray-200 border-gray-200 relative">

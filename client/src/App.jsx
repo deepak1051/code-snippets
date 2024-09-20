@@ -58,7 +58,7 @@ function App() {
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path="/" element={<Homepage snippets={snippets} />} />
+        <Route path="/" element={<Homepage />} />
         <Route
           path="/snippets/:id"
           element={

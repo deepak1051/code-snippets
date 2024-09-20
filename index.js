@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import mongoose from 'mongoose';
 import snippetRoutes from './routes/snippets.route.js';
+import authRoutes from './routes/auth.route.js';
 import cors from 'cors';
 import path from 'path';
 
@@ -15,6 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/snippets', snippetRoutes);
+app.use('/api/auth', authRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   const __dirname = path.resolve();
