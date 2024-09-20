@@ -1,6 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import { authMiddleware } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
@@ -25,6 +26,12 @@ router.post('/register', async (req, res) => {
         .status(400)
         .json({ message: 'email and password field is required' });
 
+    const user = await User.findOne({ email });
+
+    if (user) {
+      return res.status(400).json({ message: 'user already exists' });
+    }
+
     await User.create({ email, password });
     res.status(201).json({ message: 'User created successfully' });
   } catch (error) {
@@ -36,6 +43,11 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
+    if (!email || !password)
+      return res
+        .status(400)
+        .json({ message: 'email and password field is required' });
+
     const user = await User.findOne({ email });
     if (!user || !(await user.matchPassword(password))) {
       return res.status(400).json({ message: 'Invalid credentials' });
