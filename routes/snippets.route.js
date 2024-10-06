@@ -17,8 +17,23 @@ router.post('/', async (req, res) => {
   try {
     const { title, steps } = req.body;
 
+    console.log(req.body);
+
     if (!title || !steps) {
       return res.status(400).json({ message: 'all fields are required.' });
+    }
+
+    if (steps.length === 0) {
+      return res.status(400).json({ message: 'please add steps' });
+    }
+
+    if (
+      steps.some((step) => step.stepCode.trim() === '') ||
+      steps.some((step) => step.stepTitle.trim() === '')
+    ) {
+      return res
+        .status(400)
+        .json({ message: 'please add code and title for each step' });
     }
 
     const snippet = await Snippet.create({
@@ -28,6 +43,7 @@ router.post('/', async (req, res) => {
 
     return res.status(201).json(snippet);
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: 'something went wrong' });
   }
 });

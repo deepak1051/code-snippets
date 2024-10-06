@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Homepage from './pages/Homepage';
-import SingleSnippetPage from './pages/SingleSnippetPage';
+import SingleSnippet from './pages/SingleSnippet';
 import CreateSnippet from './pages/CreateSnippet';
 import Header from './components/Header';
 import { useCallback, useEffect, useState } from 'react';
@@ -62,10 +62,7 @@ function App() {
         <Route
           path="/snippets/:id"
           element={
-            <SingleSnippetPage
-              snippets={snippets}
-              deleteSnippet={deleteSnippet}
-            />
+            <SingleSnippet snippets={snippets} deleteSnippet={deleteSnippet} />
           }
         />
         <Route
