@@ -1,24 +1,11 @@
 import 'dotenv/config';
-import express from 'express';
 import mongoose from 'mongoose';
-import snippetRoutes from './routes/snippets.route.js';
-import authRoutes from './routes/auth.route.js';
-import cors from 'cors';
-import path from 'path';
-import morgan from 'morgan';
+import app from './src/app.js';
 
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log('connected to db'))
   .catch((err) => console.log(err.message));
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-app.use(morgan('dev'));
-
-app.use('/api/snippets', snippetRoutes);
-app.use('/api/auth', authRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   const __dirname = path.resolve();
@@ -33,6 +20,8 @@ if (process.env.NODE_ENV === 'production') {
     res.send('API is running....');
   });
 }
+
+console.log(process.env.NODE_ENV);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`running on port ${port}`));

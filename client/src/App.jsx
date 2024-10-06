@@ -1,11 +1,11 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Homepage from './pages/Homepage';
-import SingleSnippet from './pages/SingleSnippet';
 import CreateSnippet from './pages/CreateSnippet';
 import Header from './components/Header';
 import { useCallback, useEffect, useState } from 'react';
 import EditSnippet from './pages/EditSnippet';
 import axios from 'axios';
+import SingleSnippetPage from './pages/SingleSnippetPage';
 
 export const url = '/api/snippets';
 // export const url = 'http://localhost:5000/api/snippets';
@@ -62,7 +62,10 @@ function App() {
         <Route
           path="/snippets/:id"
           element={
-            <SingleSnippet snippets={snippets} deleteSnippet={deleteSnippet} />
+            <SingleSnippetPage
+              snippets={snippets}
+              deleteSnippet={deleteSnippet}
+            />
           }
         />
         <Route
