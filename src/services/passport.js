@@ -50,7 +50,10 @@ passport.use(
     {
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: '/auth/github/callback',
+      callbackURL:
+        process.env.NODE_ENV === 'development'
+          ? 'http://localhost:5000/auth/github/callback' // Ensure this matches in development
+          : 'https://code-snippets-y4ua.onrender.com/auth/github/callback',
     },
     async (accessToken, refreshToken, profile, done) => {
       console.log(profile);
