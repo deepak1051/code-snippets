@@ -11,31 +11,6 @@ export const url = '/api/snippets';
 // export const url = 'http://localhost:5000/api/snippets';
 
 function App() {
-  const [snippets, setSnippets] = useState([]);
-
-  const fetchData = useCallback(async () => {
-    try {
-      const { data } = await axios.get(url);
-
-      setSnippets(data);
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  const createSnippet = async (snippet) => {
-    try {
-      const { data } = await axios.post(url, snippet);
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const editSnippet = async (snippet) => {
     try {
       const { data } = await axios.put(`${url}/${snippet._id}`, snippet);
@@ -61,25 +36,13 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route
           path="/snippets/:id"
-          element={
-            <SingleSnippetPage
-              snippets={snippets}
-              deleteSnippet={deleteSnippet}
-            />
-          }
+          element={<SingleSnippetPage deleteSnippet={deleteSnippet} />}
         />
-        <Route
-          path="/snippets/new"
-          element={
-            <CreateSnippet snippets={snippets} createSnippet={createSnippet} />
-          }
-        />
+        <Route path="/snippets/new" element={<CreateSnippet />} />
 
         <Route
           path="/snippets/:id/edit"
-          element={
-            <EditSnippet snippets={snippets} editSnippet={editSnippet} />
-          }
+          element={<EditSnippet editSnippet={editSnippet} />}
         />
       </Routes>
     </BrowserRouter>

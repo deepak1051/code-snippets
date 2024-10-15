@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import api from '../config/api';
 
 export default function Homepage() {
   const { data, isError, isPending, error } = useQuery({
     queryKey: ['snippets'],
-    queryFn: () => axios.get('/api/snippets').then((res) => res.data),
+    queryFn: () => api.get('/snippets').then((res) => res.data),
   });
 
   if (isPending) return <div>Loading...</div>;
