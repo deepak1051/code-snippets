@@ -36,7 +36,9 @@ router.get(
       process.env.NODE_ENV === 'development' ? 'http://localhost:5173' : '/';
 
     res.redirect(
-      process.env.NODE_ENV === 'development' ? 'http://localhost:5173' : '/'
+      process.env.NODE_ENV === 'development'
+        ? 'http://localhost:5173'
+        : 'https://code-snippets-y4ua.onrender.com'
     );
   }
 );
