@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
 import app from './src/app.js';
+import path from 'path';
 
 mongoose
   .connect(process.env.MONGO_URI)
