@@ -1,7 +1,8 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
 import app from './src/app.js';
-import path from 'path';
+import path from 'node:path';
+import express from 'express';
 
 mongoose
   .connect(process.env.MONGO_URI)
