@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', auth, async (req, res) => {
+router.post('/',auth, async (req, res) => {
   try {
     const { title, steps } = req.body;
 

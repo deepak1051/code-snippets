@@ -1,25 +1,28 @@
-import { Editor } from '@monaco-editor/react';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { url } from '../App';
-import { nanoid } from 'nanoid';
-import { MdDelete } from 'react-icons/md';
-import { CiSquareChevDown, CiSquareChevUp } from 'react-icons/ci';
+import { Editor } from "@monaco-editor/react";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { url } from "../App";
+import { nanoid } from "nanoid";
+import { MdDelete } from "react-icons/md";
+import { CiSquareChevDown, CiSquareChevUp } from "react-icons/ci";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const STEP_ADD_TYPE = {
-  UP: 'UP',
-  DOWN: 'DOWN',
+  UP: "UP",
+  DOWN: "DOWN",
 };
 
 export default function EditSnippet({ editSnippet }) {
   const { id } = useParams();
 
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState("");
   const [steps, setSteps] = useState([]);
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,25 +38,37 @@ export default function EditSnippet({ editSnippet }) {
     fetchData();
   }, [id]);
 
-  const handleSubmit = (e) => {
+  const editSnippetMutation = useMutation({
+    mutationFn: ({ title, steps, _id }) =>
+      axios.put(`${url}/${_id}`, { title, steps }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["snippets"]);
+      navigate("/");
+    },
+    onError: (error) => {
+      console.log("ERROR", error);
+      setError(error.response.data.message || error.message);
+    },
+  });
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     setError(null);
 
     if (!title || steps.length === 0) {
-      setError('Please add  code');
+      setError("Please add  code");
       return;
     }
 
-    editSnippet({ title, steps, _id: id });
-    navigate('/');
+    await editSnippetMutation.mutate({ title, steps, _id: id });
   };
 
   const handleAddMore = (id = null, type = null) => {
     if (!id || !type) {
       setSteps((prev) => [
         ...prev,
-        { stepTitle: '', stepCode: '', id: nanoid() },
+        { stepTitle: "", stepCode: "", id: nanoid() },
       ]);
       return;
     }
@@ -64,7 +79,7 @@ export default function EditSnippet({ editSnippet }) {
       setSteps((prev) => {
         return [
           ...prev.slice(0, stepIndex),
-          { stepTitle: '', stepCode: '', id: nanoid() },
+          { stepTitle: "", stepCode: "", id: nanoid() },
           ...prev.slice(stepIndex),
         ];
       });
@@ -74,7 +89,7 @@ export default function EditSnippet({ editSnippet }) {
       setSteps((prev) => {
         return [
           ...prev.slice(0, stepIndex + 1),
-          { stepTitle: '', stepCode: '', id: nanoid() },
+          { stepTitle: "", stepCode: "", id: nanoid() },
           ...prev.slice(stepIndex + 1),
         ];
       });
@@ -96,7 +111,7 @@ export default function EditSnippet({ editSnippet }) {
   };
 
   const handleDeleteStep = (id) => {
-    if (window.confirm('Are you sure you want to delete this code step')) {
+    if (window.confirm("Are you sure you want to delete this code step")) {
       setSteps((prev) => prev.filter((step) => step.id !== id));
     }
   };

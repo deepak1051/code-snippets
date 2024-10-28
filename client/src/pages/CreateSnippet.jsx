@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { nanoid } from 'nanoid';
-import { MdDelete } from 'react-icons/md';
-import axios from 'axios';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { nanoid } from "nanoid";
+import { MdDelete } from "react-icons/md";
+import axios from "axios";
 
 export default function CreateSnippet() {
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState("");
   const [error, setError] = useState(null);
   const [steps, setSteps] = useState([]);
 
@@ -15,16 +15,15 @@ export default function CreateSnippet() {
     e.preventDefault();
     setError(null);
     if (!title || steps.length === 0) {
-      setError('Please add a title and steps');
+      setError("Please add a title and steps");
       return;
     }
 
     try {
-      await axios.post('/api/snippets', { title, steps });
-      // await createSnippet({ title, steps });
-      navigate('/');
+      await axios.post("/api/snippets", { title, steps });
+      navigate("/");
     } catch (error) {
-      console.log('ERROR', error);
+      console.log("ERROR", error);
       setError(error.response.data.message || error.message);
     }
   };
@@ -32,7 +31,7 @@ export default function CreateSnippet() {
   const handleAddMore = () => {
     setSteps((prev) => [
       ...prev,
-      { stepTitle: '', stepCode: '', id: nanoid() },
+      { stepTitle: "", stepCode: "", id: nanoid() },
     ]);
   };
 
