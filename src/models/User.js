@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const userTypes = {
+export const userTypes = {
   USER: "USER",
   ADMIN: "ADMIN",
 };
