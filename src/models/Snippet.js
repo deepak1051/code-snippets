@@ -17,6 +17,12 @@ const snippetSchema = new mongoose.Schema({
       },
     },
   ],
+
+  author:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  }
 });
 
 const Snippet = new mongoose.model('Snippet', snippetSchema);

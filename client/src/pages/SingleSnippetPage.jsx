@@ -1,24 +1,44 @@
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
-import axios from 'axios';
+import axios from "axios";
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export default function SingleSnippetPage({ deleteSnippet }) {
+export default function SingleSnippetPage() {
   const { id } = useParams();
 
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ['snippets', id],
+    queryKey: ["snippets", id],
     queryFn: () => axios.get(`/api/snippets/${id}`).then((res) => res.data),
   });
 
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const handleDelete = async (id) => {
-    if (window.confirm('you really want to delete this snippet')) {
-      await deleteSnippet(id);
-      navigate('/');
+  const deleteMutation = useMutation({
+    mutationFn: () =>
+      axios.delete(`/api/snippets/${id}`).then((res) => res.data),
+    onSuccess: () => {
+      navigate("/");
+      queryClient.invalidateQueries(["snippets"]);
+    },
+    onError(error) {
+      console.log("ERRO RROR", error);
+      toast.error(
+        error.response.data.message || error.message || "Something went wrong"
+      );
+    },
+  });
+
+  const handleDelete = async () => {
+    if (window.confirm("you really want to delete this snippet")) {
+      try {
+        await deleteMutation.mutate();
+      } catch (error) {
+        console.log("XXERROR", error);
+        toast.error(error.response.data.message);
+      }
     }
   };
 
@@ -42,10 +62,11 @@ export default function SingleSnippetPage({ deleteSnippet }) {
           </Link>
           <div>
             <button
+              disabled={deleteMutation.isPending}
               onClick={async () => handleDelete(data._id)}
               className="p-2 border rounded"
             >
-              Delete
+              {deleteMutation.isPending ? "Deleting..." : "Delete"}
             </button>
           </div>
         </div>
@@ -61,7 +82,7 @@ export default function SingleSnippetPage({ deleteSnippet }) {
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(step.stepCode);
-                  toast.success('Code copied to clipboard');
+                  toast.success("Code copied to clipboard");
                 }}
                 className="text-white font-bold p-2 border bg-slate-400 rounded absolute right-4 top-4 text-xs"
               >
