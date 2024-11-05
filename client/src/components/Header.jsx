@@ -9,6 +9,8 @@ export default function Header() {
     queryFn: () => api.get('/current_user').then((res) => res.data),
   });
 
+  console.log('data', data);
+
   let content;
 
   if (data === undefined) {

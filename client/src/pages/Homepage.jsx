@@ -4,6 +4,13 @@ import { Link } from 'react-router-dom';
 import api from '../config/api';
 
 export default function Homepage() {
+  const { data: currentUserData } = useQuery({
+    queryKey: ['current_user'],
+    queryFn: () => api.get('/current_user').then((res) => res.data),
+  });
+
+  console.log('currentUserData', currentUserData);
+
   const { data, isError, isPending, error } = useQuery({
     queryKey: ['snippets'],
     queryFn: () => api.get('/snippets').then((res) => res.data),
