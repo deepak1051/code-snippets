@@ -10,7 +10,9 @@ router.get(
 
 router.get(
   '/auth/google/callback',
-  passport.authenticate('google'),
+  passport.authenticate('google', {
+    failureRedirect: '/fail',
+  }),
   (req, res) => {
     const path_name =
       process.env.NODE_ENV === 'development' ? 'http://localhost:5173/' : '/';

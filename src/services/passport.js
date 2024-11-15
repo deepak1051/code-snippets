@@ -5,10 +5,12 @@ import { Strategy as GitHubStrategy } from 'passport-github2';
 import User from '../models/User.js';
 
 passport.serializeUser((user, done) => {
+  console.log('serializing user', user.id);
   done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
+  console.log('deserializing user', id);
   User.findById(id).then((user) => {
     done(null, user);
   });
