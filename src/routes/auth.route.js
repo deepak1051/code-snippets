@@ -14,8 +14,15 @@ router.get(
     failureRedirect: '/fail',
   }),
   (req, res) => {
+    const path_name =
+      process.env.NODE_ENV === 'development' ? 'http://localhost:5173/' : '/';
+
+    console.log(path_name);
+
     res.redirect(
-      process.env.NODE_ENV === 'development' ? 'http://localhost:5173/' : '/'
+      process.env.NODE_ENV === 'development'
+        ? 'http://localhost:5173/'
+        : '/snippets/new'
     );
   }
 );
@@ -29,6 +36,9 @@ router.get(
   '/auth/github/callback',
   passport.authenticate('github'),
   (req, res) => {
+    const path_name =
+      process.env.NODE_ENV === 'development' ? 'http://localhost:5173' : '/';
+
     res.redirect(
       process.env.NODE_ENV === 'development'
         ? 'http://localhost:5173'
@@ -38,10 +48,15 @@ router.get(
 );
 
 router.get('/api/current_user', (req, res) => {
+  console.log(req.user);
+
   res.send(req.user);
 });
 
 router.get('/api/logout', (req, res) => {
+  const path_name =
+    process.env.NODE_ENV === 'development' ? 'http://localhost:5173/' : '/';
+
   req.logout();
   res.redirect(
     process.env.NODE_ENV === 'development' ? 'http://localhost:5173/' : '/'
