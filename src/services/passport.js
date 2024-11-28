@@ -56,6 +56,8 @@ passport.use(
         process.env.NODE_ENV === 'development'
           ? 'http://localhost:5000/auth/github/callback' // Ensure this matches in development
           : 'https://code-snippets-y4ua.onrender.com/auth/github/callback',
+
+      proxy: true,
     },
     async (accessToken, refreshToken, profile, done) => {
       console.log(profile);
