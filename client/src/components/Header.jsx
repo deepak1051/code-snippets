@@ -1,21 +1,23 @@
-import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
-import { FaGoogle, FaGithub } from "react-icons/fa";
-import api from "../config/api";
-import { Button } from "./ui/button";
-import { cn } from "../lib/utils";
+import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
+import { FaGoogle, FaGithub } from 'react-icons/fa';
+import { GiSnitchQuidditchBall } from 'react-icons/gi';
+import api from '../config/api';
+import { Button } from './ui/button';
+import { cn } from '../lib/utils';
+import { ProfileDropdown } from './ProfileDropdown';
 
 export default function Header() {
   const { data } = useQuery({
-    queryKey: ["current_user"],
-    queryFn: () => api.get("/current_user").then((res) => res.data),
+    queryKey: ['current_user'],
+    queryFn: () => api.get('/current_user').then((res) => res.data),
   });
 
   let content;
 
   if (data === undefined) {
     content = null;
-  } else if (data === "") {
+  } else if (data === '') {
     content = (
       <div className="flex items-center gap-3">
         <a href="/auth/google">
@@ -36,26 +38,28 @@ export default function Header() {
     content = (
       <div className="flex items-center gap-4">
         <Link to="/snippets/new">
-          <Button variant="default" className="gap-2">
+          <Button variant="default" className="gap-2 bg-primary">
             Create
           </Button>
         </Link>
-        <Link to="/snippets">
+
+        <ProfileDropdown user={data} />
+        {/* <Link to="/snippets">
           <Button
             variant="ghost"
             className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
           >
             My Snippets
           </Button>
-        </Link>
-        <a href="/auth/logout">
+        </Link> */}
+        {/* <a href="/api/logout">
           <Button
             variant="outline"
             className="text-red-600 hover:text-red-700 hover:bg-red-50"
           >
             Logout
           </Button>
-        </a>
+        </a> */}
       </div>
     );
   }
@@ -67,10 +71,11 @@ export default function Header() {
           <Link
             to="/"
             className={cn(
-              "flex items-center space-x-2 text-lg font-bold text-blue-600 hover:text-blue-700 transition-colors"
+              'flex items-center space-x-2 text-lg font-bold text-blue-600 hover:text-blue-700 transition-colors'
             )}
           >
-            Code Snippets
+            {/* Code Snippets */}
+            <GiSnitchQuidditchBall className="h-10 w-10" />
           </Link>
           {content}
         </div>
