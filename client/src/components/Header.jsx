@@ -61,7 +61,7 @@ export default function Header() {
   }
 
   return (
-    <header className="sticky py-2 top-0 z-50 w-full border-b bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky py-2 top-0 z-50 w-full border-b bg-gray-200/60 backdrop-blur supports-[backdrop-filter]:bg-gray-200/60 shadow-sm">
       <div className="container flex h-14 max-w-screen-2xl items-center">
         <div className="flex flex-1 items-center justify-between">
           <Link
