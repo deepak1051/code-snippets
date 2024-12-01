@@ -1,10 +1,26 @@
+// {
+//   "compilerOptions": {
+//     "composite": true,
+//     "skipLibCheck": true,
+//     "module": "ESNext",
+//     "moduleResolution": "bundler",
+//     "allowSyntheticDefaultImports": true
+//   },
+//   "include": ["vite.config.ts"]
+// }
+
+
 {
   "compilerOptions": {
-    "composite": true,
-    "skipLibCheck": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "allowSyntheticDefaultImports": true
+    "module": "ESNext",                    // For Vite's ES module system
+    "target": "ESNext",                    // Target modern JavaScript
+    "moduleResolution": "node",            // Use Node module resolution
+    "baseUrl": ".",                        // Base path for imports
+    "paths": {                             // Optional: Custom module paths
+      "@/*": ["src/*"]
+    },
+    "allowSyntheticDefaultImports": true,  // Allow default imports even if no default export
+    "jsx": "react"                         // If using React
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.js", "src/**/*"]
 }

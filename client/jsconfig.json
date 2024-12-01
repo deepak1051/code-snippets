@@ -26,6 +26,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src"],
-  "references": [{ "path": "./jsconfig.node.json" }]
+  "include": ["src"]
 }
