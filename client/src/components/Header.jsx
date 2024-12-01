@@ -1,76 +1,79 @@
-import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
-import { FaGoogle, FaGithub } from 'react-icons/fa';
-import api from '../config/api';
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
+import { FaGoogle, FaGithub } from "react-icons/fa";
+import api from "../config/api";
+import { Button } from "./ui/button";
+import { cn } from "../lib/utils";
 
 export default function Header() {
   const { data } = useQuery({
-    queryKey: ['current_user'],
-    queryFn: () => api.get('/current_user').then((res) => res.data),
+    queryKey: ["current_user"],
+    queryFn: () => api.get("/current_user").then((res) => res.data),
   });
-
-  console.log('data', data);
 
   let content;
 
   if (data === undefined) {
     content = null;
-  } else if (data === '') {
+  } else if (data === "") {
     content = (
       <div className="flex items-center gap-3">
-        <a
-          href="/auth/google"
-          className="flex items-center gap-2 bg-teal-600 text-white px-5 py-2 rounded-full hover:bg-teal-700 shadow-lg transform hover:scale-105 transition-all duration-200"
-        >
-          <FaGoogle size={18} />
-          <span>Login with Google</span>
+        <a href="/auth/google">
+          <Button variant="secondary" className="gap-2 hover:bg-blue-100">
+            <FaGoogle className="h-4 w-4" />
+            <span>Login with Google</span>
+          </Button>
         </a>
-        <a
-          href="/auth/github"
-          className="flex items-center gap-2 bg-gray-700 text-white px-5 py-2 rounded-full hover:bg-gray-800 shadow-lg transform hover:scale-105 transition-all duration-200"
-        >
-          <FaGithub size={18} />
-          <span>Login with GitHub</span>
+        <a href="/auth/github">
+          <Button variant="secondary" className="gap-2 hover:bg-blue-100">
+            <FaGithub className="h-4 w-4" />
+            <span>Login with GitHub</span>
+          </Button>
         </a>
       </div>
     );
   } else if (data) {
     content = (
       <div className="flex items-center gap-4">
-        <Link
-          to="/snippets/new"
-          className="bg-indigo-500 text-white px-5 py-2 rounded-full hover:bg-indigo-600 shadow-lg transform hover:scale-105 transition-all duration-200"
-        >
-          Create
+        <Link to="/snippets/new">
+          <Button variant="default" className="gap-2">
+            Create
+          </Button>
         </Link>
-        <Link
-          to="/snippets"
-          className="text-gray-600 hover:text-indigo-500 transition-colors duration-200"
-        >
-          My Snippets
+        <Link to="/snippets">
+          <Button
+            variant="ghost"
+            className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+          >
+            My Snippets
+          </Button>
         </Link>
-        <img
-          src={data?.avatar}
-          alt="avatar"
-          className="w-10 h-10 rounded-full border-2 border-white shadow-md cursor-pointer hover:shadow-lg transition-shadow duration-300"
-        />
-        <a
-          href="/api/logout"
-          className="text-red-500 hover:text-red-600 transition-colors duration-200"
-        >
-          Logout
+        <a href="/auth/logout">
+          <Button
+            variant="outline"
+            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+          >
+            Logout
+          </Button>
         </a>
       </div>
     );
   }
 
   return (
-    <header className="bg-indigo-50 shadow-md">
-      <div className="container mx-auto px-6 py-4 max-w-5xl flex items-center justify-between">
-        <Link to="/" className="text-2xl font-extrabold italic text-indigo-600">
-          Snippets
-        </Link>
-        {content}
+    <header className="sticky py-2 top-0 z-50 w-full border-b bg-gray-200/60 backdrop-blur supports-[backdrop-filter]:bg-gray-200/60 shadow-sm">
+      <div className="container flex h-14 max-w-screen-2xl items-center">
+        <div className="flex flex-1 items-center justify-between">
+          <Link
+            to="/"
+            className={cn(
+              "flex items-center space-x-2 text-lg font-bold text-blue-600 hover:text-blue-700 transition-colors"
+            )}
+          >
+            Code Snippets
+          </Link>
+          {content}
+        </div>
       </div>
     </header>
   );

@@ -11,14 +11,17 @@ export const url = "/api/snippets";
 function App() {
   return (
     <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Homepage />} />
-        <Route path="/snippets/:id" element={<SingleSnippetPage />} />
-        <Route path="/snippets/new" element={<CreateSnippet />} />
-
-        <Route path="/snippets/:id/edit" element={<EditSnippet />} />
-      </Routes>
+      <div className="min-h-screen bg-background font-sans antialiased">
+        <Header />
+        <main className="container mx-auto px-4 py-6 max-w-7xl">
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/snippets/:id" element={<SingleSnippetPage />} />
+            <Route path="/snippets/new" element={<CreateSnippet />} />
+            <Route path="/snippets/:id/edit" element={<EditSnippet />} />
+          </Routes>
+        </main>
+      </div>
     </BrowserRouter>
   );
 }
