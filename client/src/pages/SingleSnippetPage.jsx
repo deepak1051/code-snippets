@@ -1,9 +1,11 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-
 import axios from "axios";
-
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Button } from "../components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "../components/ui/card";
+import { Code, Pre } from "../components/ui/code";
+import { FiEdit3, FiTrash2, FiCopy } from "react-icons/fi";
 
 export default function SingleSnippetPage() {
   const { id } = useParams();
@@ -22,9 +24,9 @@ export default function SingleSnippetPage() {
     onSuccess: () => {
       navigate("/");
       queryClient.invalidateQueries(["snippets"]);
+      toast.success("Snippet deleted successfully");
     },
     onError(error) {
-      console.log("ERRO RROR", error);
       toast.error(
         error.response.data.message || error.message || "Something went wrong"
       );
@@ -32,64 +34,82 @@ export default function SingleSnippetPage() {
   });
 
   const handleDelete = async () => {
-    if (window.confirm("you really want to delete this snippet")) {
+    if (window.confirm("Are you sure you want to delete this snippet?")) {
       try {
         await deleteMutation.mutate();
       } catch (error) {
-        console.log("XXERROR", error);
         toast.error(error.response.data.message);
       }
     }
   };
 
   if (isPending) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-pulse text-blue-600">Loading...</div>
+      </div>
+    );
   }
 
-  if (isError) return <div>{error.toString()}</div>;
+  if (isError) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-red-600">{error.toString()}</div>
+      </div>
+    );
+  }
 
   return (
-    <div className="m-4 container mx-auto px-4 max-w-4xl">
-      <div className="flex my-4 justify-between items-center">
-        <h1 className="text-xl font-bold text-indigo-400">{data.title}</h1>
-
-        <div className="flex gap-4">
-          <Link
-            to={`/snippets/${data._id}/edit`}
-            className="p-2 border rounded"
-          >
-            Edit
-          </Link>
-          <div>
-            <button
+    <div className="space-y-8">
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-2xl font-bold text-blue-600">
+            {data.title}
+          </CardTitle>
+          <div className="flex gap-2">
+            <Link to={`/snippets/${data._id}/edit`}>
+              <Button variant="outline" size="icon" className="h-8 w-8">
+                <FiEdit3 className="h-4 w-4" />
+              </Button>
+            </Link>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8 text-red-500 hover:text-red-600"
               disabled={deleteMutation.isPending}
-              onClick={async () => handleDelete(data._id)}
-              className="p-2 border rounded"
+              onClick={handleDelete}
             >
-              {deleteMutation.isPending ? "Deleting..." : "Delete"}
-            </button>
+              <FiTrash2 className="h-4 w-4" />
+            </Button>
           </div>
-        </div>
-      </div>
+        </CardHeader>
+      </Card>
 
-      <div className="flex flex-col gap-6">
-        {data?.steps?.map((step) => (
-          <div key={step._id} className="flex flex-col gap-2">
-            <h2>{step.stepTitle}</h2>
-            <pre className="p-3 border rounded bg-gray-200 border-gray-200 relative">
-              <code>{step.stepCode}</code>
-
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(step.stepCode);
-                  toast.success("Code copied to clipboard");
-                }}
-                className="text-white font-bold p-2 border bg-slate-400 rounded absolute right-4 top-4 text-xs"
-              >
-                Copy
-              </button>
-            </pre>
-          </div>
+      <div className="grid gap-6">
+        {data?.steps?.map((step, index) => (
+          <Card key={step._id} className="overflow-hidden">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg font-medium">
+                Step {index + 1}: {step.stepTitle}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="relative">
+              <Pre className="relative group">
+                <Code>{step.stepCode}</Code>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-4 top-4 opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={() => {
+                    navigator.clipboard.writeText(step.stepCode);
+                    toast.success("Code copied to clipboard");
+                  }}
+                >
+                  <FiCopy className="h-4 w-4" />
+                </Button>
+              </Pre>
+            </CardContent>
+          </Card>
         ))}
       </div>
     </div>

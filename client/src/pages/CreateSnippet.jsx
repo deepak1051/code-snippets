@@ -3,6 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { nanoid } from "nanoid";
 import { MdDelete } from "react-icons/md";
 import axios from "axios";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Textarea } from "../components/ui/textarea";
+import { Label } from "../components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 
 export default function CreateSnippet() {
   const [title, setTitle] = useState("");
@@ -56,92 +61,89 @@ export default function CreateSnippet() {
   return (
     <div className="container mx-auto p-4 max-w-4xl">
       <form onSubmit={handleSubmit}>
-        <h3 className="font-semibold my-3 text-2xl text-center text-indigo-400">
-          Create a snippet
-        </h3>
-        <div className="flex flex-col gap-4">
-          <div className="flex gap-4">
-            <label className="w-12" htmlFor="title">
-              Title
-            </label>
-            <input
-              type="text"
-              name="title"
-              className="border rounded p-2 w-full"
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </div>
-
-          <div className="flex flex-col gap-4">
-            {steps.map((item) => (
-              <div
-                key={item.id}
-                className="relative bg-gray-300 shadow-lg  border p-2 rounded flex gap-2"
-              >
-                <div className="flex-1">
-                  <div className="flex gap-4 mb-2">
-                    <label className="whitespace-nowrap" htmlFor="title">
-                      step title
-                    </label>
-                    <input
-                      type="text"
-                      name="title"
-                      className="border rounded p-2 w-full"
-                      id="title"
-                      value={item.stepTitle}
-                      onChange={(e) =>
-                        handleChangeStepTitle(e.target.value, item.id)
-                      }
-                    />
-                  </div>
-
-                  <div className="flex gap-4">
-                    <label className="whitespace-nowrap" htmlFor="code">
-                      step code
-                    </label>
-                    <textarea
-                      name="code"
-                      className="border rounded p-2 w-full"
-                      id="code"
-                      value={item.stepCode}
-                      onChange={(e) =>
-                        handleChangeStepCode(e.target.value, item.id)
-                      }
-                      rows={4}
-                    />
-                  </div>
-                </div>
-                <button
-                  onClick={() => handleDelete(item.id)}
-                  type="button"
-                  className="p-2 rounded border  h-16"
-                >
-                  <MdDelete size={24} color="red" />
-                </button>
-              </div>
-            ))}
-          </div>
-
-          <button
-            type="button"
-            onClick={handleAddMore}
-            className="p-2 rounded-md border bg-slate-50 "
-          >
-            Add More
-          </button>
-
-          {error ? (
-            <div className="my-2 p-2 bg-red-200 border rounded border-red-400">
-              {error}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-center text-indigo-400">
+              Create a snippet
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="title">Title</Label>
+              <Input
+                type="text"
+                name="title"
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
             </div>
-          ) : null}
 
-          <button type="submit" className="rounded p-2 bg-blue-800 text-white">
-            Create
-          </button>
-        </div>
+            <div className="flex flex-col gap-4">
+              {steps.map((item) => (
+                <Card key={item.id}>
+                  <CardContent className="relative flex gap-4 p-4">
+                    <div className="flex-1 space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor={`step-title-${item.id}`}>Step Title</Label>
+                        <Input
+                          type="text"
+                          name="title"
+                          id={`step-title-${item.id}`}
+                          value={item.stepTitle}
+                          onChange={(e) =>
+                            handleChangeStepTitle(e.target.value, item.id)
+                          }
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor={`step-code-${item.id}`}>Step Code</Label>
+                        <Textarea
+                          name="code"
+                          id={`step-code-${item.id}`}
+                          value={item.stepCode}
+                          onChange={(e) =>
+                            handleChangeStepCode(e.target.value, item.id)
+                          }
+                          rows={4}
+                        />
+                      </div>
+                    </div>
+                    <Button
+                      onClick={() => handleDelete(item.id)}
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      className="h-10 w-10"
+                    >
+                      <MdDelete className="h-4 w-4 text-red-500" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <Button
+              type="button"
+              onClick={handleAddMore}
+              variant="outline"
+              className="w-full"
+            >
+              Add More
+            </Button>
+
+            {error && (
+              <div className="rounded-md bg-destructive/15 text-destructive p-3">
+                {error}
+              </div>
+            )}
+
+            <Button type="submit" className="w-full">
+              Create
+            </Button>
+          </CardContent>
+        </Card>
       </form>
     </div>
   );
