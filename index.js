@@ -7,7 +7,7 @@ import express from 'express';
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log('connected to db'))
-  .catch((err) => console.log(err.message));
+  .catch((err) => console.log('Error connecting to db', err.message));
 
 if (process.env.NODE_ENV === 'production') {
   const __dirname = path.resolve();
@@ -22,8 +22,6 @@ if (process.env.NODE_ENV === 'production') {
     res.send('API is running....');
   });
 }
-
-console.log(process.env.NODE_ENV);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`running on port ${port}`));

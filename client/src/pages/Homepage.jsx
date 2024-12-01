@@ -1,8 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import api from '../config/api';
-import { Card, CardHeader, CardTitle, CardContent } from "../components/ui/card";
-import { Button } from "../components/ui/button";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from '../components/ui/card';
+import { Button } from '../components/ui/button';
 import { FiChevronRight } from 'react-icons/fi';
 
 export default function Homepage() {
@@ -35,7 +40,9 @@ export default function Homepage() {
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight text-blue-600">Code Snippets</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-blue-600">
+          Code Snippets
+        </h1>
         <p className="text-muted-foreground">
           Browse through the collection of code snippets or create your own.
         </p>
@@ -43,13 +50,19 @@ export default function Homepage() {
 
       <div className="grid gap-4">
         {data?.map((snippet) => (
-          <Card key={snippet._id} className="group hover:shadow-md transition-all">
+          <Card
+            key={snippet._id}
+            className="group hover:shadow-md transition-all"
+          >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-xl font-semibold">
                 {snippet.title}
               </CardTitle>
               <Link to={`/snippets/${snippet._id}`}>
-                <Button variant="ghost" className="group-hover:bg-blue-50 group-hover:text-blue-600">
+                <Button
+                  variant="ghost"
+                  className="group-hover:bg-blue-50 group-hover:text-blue-600"
+                >
                   View
                   <FiChevronRight className="ml-2 h-4 w-4" />
                 </Button>
@@ -57,7 +70,8 @@ export default function Homepage() {
             </CardHeader>
             <CardContent>
               <div className="text-sm text-muted-foreground">
-                {snippet.steps?.length} step{snippet.steps?.length !== 1 ? 's' : ''}
+                {snippet.steps?.length} step
+                {snippet.steps?.length !== 1 ? 's' : ''}
               </div>
             </CardContent>
           </Card>
