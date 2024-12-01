@@ -38,7 +38,7 @@ export default function Homepage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8  ">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight text-blue-600">
           Code Snippets
@@ -52,11 +52,17 @@ export default function Homepage() {
         {data?.map((snippet) => (
           <Card
             key={snippet._id}
-            className="group hover:shadow-md transition-all"
+            className="group hover:shadow-md transition-all  "
           >
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-xl font-semibold">
-                {snippet.title}
+            <CardHeader className="flex flex-row items-center justify-between   py-4">
+              <CardTitle className="text-xl font-semibold flex items-center gap-4  ">
+                {snippet.title} -
+                {
+                  <div className="text-sm text-muted-foreground">
+                    {snippet.steps?.length} step
+                    {snippet.steps?.length !== 1 ? 's' : ''}
+                  </div>
+                }
               </CardTitle>
               <Link to={`/snippets/${snippet._id}`}>
                 <Button
@@ -68,12 +74,6 @@ export default function Homepage() {
                 </Button>
               </Link>
             </CardHeader>
-            <CardContent>
-              <div className="text-sm text-muted-foreground">
-                {snippet.steps?.length} step
-                {snippet.steps?.length !== 1 ? 's' : ''}
-              </div>
-            </CardContent>
           </Card>
         ))}
 
