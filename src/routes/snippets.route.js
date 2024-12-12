@@ -52,6 +52,20 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
+router.get('/user', auth, async (req, res) => {
+  // throw new Error('snippet error');
+  try {
+    const snippets = await Snippet.find({ author: req.user._id });
+
+    console.log('snippets', snippets);
+
+    return res.status(200).json(snippets);
+  } catch (err) {
+    console.log('err', err);
+    return res.status(500).json({ message: 'something went wrong' });
+  }
+});
+
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -61,16 +75,6 @@ router.get('/:id', async (req, res) => {
     if (!snippet) return res.status(404).json({ message: 'snippet not found' });
 
     return res.status(200).json(snippet);
-  } catch (err) {
-    return res.status(500).json({ message: 'something went wrong' });
-  }
-});
-
-router.get('/user', auth, async (req, res) => {
-  try {
-    const snippets = await Snippet.find({ author: req.user._id });
-
-    return res.status(200).json(snippets);
   } catch (err) {
     return res.status(500).json({ message: 'something went wrong' });
   }
