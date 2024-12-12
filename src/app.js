@@ -3,8 +3,8 @@ import cors from "cors";
 import express from "express";
 import morgan from "morgan";
 import passport from "passport";
-import authRoutes from "./routes/auth.route.js";
-import snippetRoutes from "./routes/snippets.route.js";
+import authRoutes from "./api/auth/auth.route.js";
+import snippetRoutes from "./api/snippets/snippets.route.js";
 
 import "./services/passport.js";
 

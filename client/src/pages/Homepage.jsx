@@ -1,24 +1,24 @@
-import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
-import api from '../config/api';
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
+import api from "../config/api";
 import {
   Card,
   CardHeader,
   CardTitle,
   CardContent,
-} from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { FiChevronRight } from 'react-icons/fi';
+} from "../components/ui/card";
+import { Button } from "../components/ui/button";
+import { FiChevronRight } from "react-icons/fi";
 
 export default function Homepage() {
   const { data: currentUserData } = useQuery({
-    queryKey: ['current_user'],
-    queryFn: () => api.get('/current_user').then((res) => res.data),
+    queryKey: ["current_user"],
+    queryFn: () => api.get("/current_user").then((res) => res.data),
   });
 
   const { data, isError, isPending, error } = useQuery({
-    queryKey: ['snippets'],
-    queryFn: () => api.get('/snippets').then((res) => res.data),
+    queryKey: ["snippets"],
+    queryFn: () => api.get("/snippets").then((res) => res.data),
   });
 
   if (isPending) {
@@ -38,7 +38,7 @@ export default function Homepage() {
   }
 
   return (
-    <div className="space-y-8  border border-red-600">
+    <div className="space-y-8  ">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight text-blue-600">
           Code Snippets
@@ -60,7 +60,7 @@ export default function Homepage() {
                 {
                   <div className="text-sm text-muted-foreground">
                     {snippet.steps?.length} step
-                    {snippet.steps?.length !== 1 ? 's' : ''}
+                    {snippet.steps?.length !== 1 ? "s" : ""}
                   </div>
                 }
               </CardTitle>
