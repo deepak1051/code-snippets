@@ -1,26 +1,19 @@
-import express from 'express';
-import Snippet from '../models/Snippet.js';
-import { auth } from '../middleware/auth.middleware.js';
-import { userTypes } from '../models/User.js';
+import Snippet from '../../models/Snippet';
+import { userTypes } from '../../models/User';
 
-const router = express.Router();
-
-router.get('/', async (req, res) => {
+export const getAllSnippets = async (req, res) => {
   try {
-    console.log('req.user', req.user);
     const snippets = await Snippet.find({});
 
     return res.status(200).json(snippets);
   } catch (err) {
     return res.status(500).json({ message: 'something went wrong' });
   }
-});
+};
 
-router.post('/', auth, async (req, res) => {
+export const createSnippet = async (req, res) => {
   try {
     const { title, steps } = req.body;
-
-    console.log(req.body);
 
     if (!title || !steps) {
       return res.status(400).json({ message: 'all fields are required.' });
@@ -50,9 +43,9 @@ router.post('/', auth, async (req, res) => {
     console.log(error);
     return res.status(500).json({ message: 'something went wrong' });
   }
-});
+};
 
-router.get('/user', auth, async (req, res) => {
+export const getSnippetsByUser = async (req, res) => {
   // throw new Error('snippet error');
   try {
     const snippets = await Snippet.find({ author: req.user._id });
@@ -64,9 +57,9 @@ router.get('/user', auth, async (req, res) => {
     console.log('err', err);
     return res.status(500).json({ message: 'something went wrong' });
   }
-});
+};
 
-router.get('/:id', async (req, res) => {
+export const getSingleSnippet = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -78,9 +71,9 @@ router.get('/:id', async (req, res) => {
   } catch (err) {
     return res.status(500).json({ message: 'something went wrong' });
   }
-});
+};
 
-router.put('/:id', auth, async (req, res) => {
+export const updateSnippet = async (req, res) => {
   try {
     const { id } = req.params;
     const { title, steps } = req.body;
@@ -121,9 +114,9 @@ router.put('/:id', auth, async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: 'something went wrong' });
   }
-});
+};
 
-router.delete('/:id', auth, async (req, res) => {
+export const deleteSnippet = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -149,6 +142,4 @@ router.delete('/:id', auth, async (req, res) => {
     console.log('ERROR', error);
     return res.status(500).json({ message: 'something went wrong' });
   }
-});
-
-export default router;
+};
