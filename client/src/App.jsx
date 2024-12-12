@@ -13,7 +13,7 @@ function App() {
     <BrowserRouter>
       <div className="min-h-screen bg-background font-sans antialiased">
         <Header />
-        <main className="container mx-auto px-8 py-2 max-w-7xl ">
+        <main className="container mx-auto lg:px-8 py-2 max-w-7xl px-2">
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/snippets/:id" element={<SingleSnippetPage />} />

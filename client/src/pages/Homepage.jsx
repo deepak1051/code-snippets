@@ -38,7 +38,7 @@ export default function Homepage() {
   }
 
   return (
-    <div className="space-y-8  ">
+    <div className="space-y-8  border border-red-600">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight text-blue-600">
           Code Snippets
