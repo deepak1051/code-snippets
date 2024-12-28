@@ -1,5 +1,6 @@
-import multer from 'multer';
+import multer from "multer";
+import path from "node:path";
 
 export const upload = multer({
-  dest: path.resolve(__dirname, '../../public/uploads'),
+  dest: path.resolve(__dirname, "../../public/uploads"),
 });
