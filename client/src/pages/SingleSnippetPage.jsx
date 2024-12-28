@@ -1,17 +1,23 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import axios from "axios";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button } from "../components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "../components/ui/card";
-import { Code, Pre } from "../components/ui/code";
-import { FiEdit3, FiTrash2, FiCopy } from "react-icons/fi";
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Button } from '../components/ui/button';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from '../components/ui/card';
+import { Code, Pre } from '../components/ui/code';
+import { FiEdit3, FiTrash2, FiCopy } from 'react-icons/fi';
+import { FaArrowLeft } from 'react-icons/fa6';
 
 export default function SingleSnippetPage() {
   const { id } = useParams();
 
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["snippets", id],
+    queryKey: ['snippets', id],
     queryFn: () => axios.get(`/api/snippets/${id}`).then((res) => res.data),
   });
 
@@ -22,19 +28,19 @@ export default function SingleSnippetPage() {
     mutationFn: () =>
       axios.delete(`/api/snippets/${id}`).then((res) => res.data),
     onSuccess: () => {
-      navigate("/");
-      queryClient.invalidateQueries(["snippets"]);
-      toast.success("Snippet deleted successfully");
+      navigate('/');
+      queryClient.invalidateQueries(['snippets']);
+      toast.success('Snippet deleted successfully');
     },
     onError(error) {
       toast.error(
-        error.response.data.message || error.message || "Something went wrong"
+        error.response.data.message || error.message || 'Something went wrong'
       );
     },
   });
 
   const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this snippet?")) {
+    if (window.confirm('Are you sure you want to delete this snippet?')) {
       try {
         await deleteMutation.mutate();
       } catch (error) {
@@ -61,6 +67,11 @@ export default function SingleSnippetPage() {
 
   return (
     <div className="space-y-8">
+      <Link to="/">
+        <Button className="bg-gray-400 hover:bg-gray-500">
+          <FaArrowLeft className="mr-2" /> Back
+        </Button>
+      </Link>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-2xl font-bold text-blue-600">
@@ -102,7 +113,7 @@ export default function SingleSnippetPage() {
                   className="absolute right-4 top-4 opacity-0 group-hover:opacity-100 transition-opacity"
                   onClick={() => {
                     navigator.clipboard.writeText(step.stepCode);
-                    toast.success("Code copied to clipboard");
+                    toast.success('Code copied to clipboard');
                   }}
                 >
                   <FiCopy className="h-4 w-4" />

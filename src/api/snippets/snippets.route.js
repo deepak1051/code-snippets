@@ -5,6 +5,8 @@ import {
   deleteSnippet,
   getAllSnippets,
   getSingleSnippet,
+  getSnippetsByUser,
+  updateSnippet,
 } from './snippets.ct.js';
 
 const router = express.Router();

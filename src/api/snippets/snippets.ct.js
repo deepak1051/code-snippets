@@ -1,5 +1,5 @@
-import Snippet from '../../models/Snippet';
-import { userTypes } from '../../models/User';
+import Snippet from '../../models/Snippet.js';
+import { userTypes } from '../../models/User.js';
 
 export const getAllSnippets = async (req, res) => {
   try {

@@ -38,7 +38,7 @@ export default function Homepage() {
   }
 
   return (
-    <div className="space-y-8  border border-red-600">
+    <div className="space-y-8  ">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight text-blue-600">
           Code Snippets
@@ -50,21 +50,19 @@ export default function Homepage() {
 
       <div className="grid gap-4">
         {data?.map((snippet) => (
-          <Card
-            key={snippet._id}
-            className="group hover:shadow-md transition-all  "
-          >
-            <CardHeader className="flex flex-row items-center justify-between   py-4">
-              <CardTitle className="text-xl font-semibold flex items-center gap-4  ">
-                {snippet.title} -
-                {
-                  <div className="text-sm text-muted-foreground">
-                    {snippet.steps?.length} step
-                    {snippet.steps?.length !== 1 ? 's' : ''}
-                  </div>
-                }
-              </CardTitle>
-              <Link to={`/snippets/${snippet._id}`}>
+          <Link to={`/snippets/${snippet._id}`} key={snippet._id}>
+            <Card className="group hover:shadow-md transition-all  cursor-pointer">
+              <CardHeader className="flex flex-row items-center justify-between   py-4">
+                <CardTitle className="text-xl font-semibold flex items-center gap-4  ">
+                  {snippet.title} -
+                  {
+                    <div className="text-sm text-muted-foreground">
+                      {snippet.steps?.length} step
+                      {snippet.steps?.length !== 1 ? 's' : ''}
+                    </div>
+                  }
+                </CardTitle>
+
                 <Button
                   variant="ghost"
                   className="group-hover:bg-blue-50 group-hover:text-blue-600"
@@ -72,9 +70,9 @@ export default function Homepage() {
                   View
                   <FiChevronRight className="ml-2 h-4 w-4" />
                 </Button>
-              </Link>
-            </CardHeader>
-          </Card>
+              </CardHeader>
+            </Card>
+          </Link>
         ))}
 
         {data?.length === 0 && (
