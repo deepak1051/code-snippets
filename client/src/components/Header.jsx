@@ -7,6 +7,8 @@ import { Button } from './ui/button';
 import { cn } from '../lib/utils';
 import { ProfileDropdown } from './ProfileDropdown';
 
+import { IoSquare } from 'react-icons/io5';
+
 export default function Header() {
   const { data } = useQuery({
     queryKey: ['current_user'],
@@ -71,11 +73,12 @@ export default function Header() {
           <Link
             to="/"
             className={cn(
-              'flex items-center space-x-2 text-lg font-bold text-blue-600 hover:text-blue-700 transition-colors'
+              'flex items-center space-x-2 text-lg font-bold text-orange-500  transition-colors'
             )}
           >
             {/* Code Snippets */}
-            <GiSnitchQuidditchBall className="h-10 w-10" />
+            {/* <GiSnitchQuidditchBall className="h-10 w-10" /> */}
+            <IoSquare className="h-10 w-10" />
           </Link>
           {content}
         </div>
