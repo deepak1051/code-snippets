@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../config/api';
 import {
   Card,
@@ -9,6 +9,7 @@ import {
 } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { FiChevronRight } from 'react-icons/fi';
+import { FaArrowLeft } from 'react-icons/fa';
 
 export default function Homepage() {
   const { data: currentUserData } = useQuery({
@@ -21,7 +22,7 @@ export default function Homepage() {
     queryFn: () => api.get('/snippets').then((res) => res.data),
   });
 
-  console.log('data', data);
+  const navigate = useNavigate();
 
   if (isPending) {
     return (
@@ -40,7 +41,7 @@ export default function Homepage() {
   }
 
   return (
-    <div className="space-y-8  ">
+    <div className="space-y-8">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight text-blue-600">
           Code Snippets
@@ -49,7 +50,6 @@ export default function Homepage() {
           Browse through the collection of code snippets or create your own.
         </p>
       </div>
-
       <div className="grid gap-4">
         {data?.map((snippet) => (
           <Link to={`/snippets/${snippet._id}`} key={snippet._id}>

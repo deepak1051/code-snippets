@@ -1,22 +1,24 @@
-import { Editor } from "@monaco-editor/react";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { url } from "../App";
-import { nanoid } from "nanoid";
-import { MdDelete } from "react-icons/md";
-import { CiSquareChevDown, CiSquareChevUp } from "react-icons/ci";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Editor } from '@monaco-editor/react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { url } from '../App';
+import { nanoid } from 'nanoid';
+import { MdDelete } from 'react-icons/md';
+import { CiSquareChevDown, CiSquareChevUp } from 'react-icons/ci';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { FaArrowLeft } from 'react-icons/fa';
+import { Button } from '@/components/ui/button';
 
 const STEP_ADD_TYPE = {
-  UP: "UP",
-  DOWN: "DOWN",
+  UP: 'UP',
+  DOWN: 'DOWN',
 };
 
 export default function EditSnippet({ editSnippet }) {
   const { id } = useParams();
 
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
   const [steps, setSteps] = useState([]);
   const [error, setError] = useState(null);
 
@@ -42,11 +44,11 @@ export default function EditSnippet({ editSnippet }) {
     mutationFn: ({ title, steps, _id }) =>
       axios.put(`${url}/${_id}`, { title, steps }),
     onSuccess: () => {
-      queryClient.invalidateQueries(["snippets"]);
-      navigate("/");
+      queryClient.invalidateQueries(['snippets']);
+      navigate('/');
     },
     onError: (error) => {
-      console.log("ERROR", error);
+      console.log('ERROR', error);
       setError(error.response.data.message || error.message);
     },
   });
@@ -57,7 +59,7 @@ export default function EditSnippet({ editSnippet }) {
     setError(null);
 
     if (!title || steps.length === 0) {
-      setError("Please add  code");
+      setError('Please add  code');
       return;
     }
 
@@ -68,7 +70,7 @@ export default function EditSnippet({ editSnippet }) {
     if (!id || !type) {
       setSteps((prev) => [
         ...prev,
-        { stepTitle: "", stepCode: "", id: nanoid() },
+        { stepTitle: '', stepCode: '', id: nanoid() },
       ]);
       return;
     }
@@ -79,7 +81,7 @@ export default function EditSnippet({ editSnippet }) {
       setSteps((prev) => {
         return [
           ...prev.slice(0, stepIndex),
-          { stepTitle: "", stepCode: "", id: nanoid() },
+          { stepTitle: '', stepCode: '', id: nanoid() },
           ...prev.slice(stepIndex),
         ];
       });
@@ -89,7 +91,7 @@ export default function EditSnippet({ editSnippet }) {
       setSteps((prev) => {
         return [
           ...prev.slice(0, stepIndex + 1),
-          { stepTitle: "", stepCode: "", id: nanoid() },
+          { stepTitle: '', stepCode: '', id: nanoid() },
           ...prev.slice(stepIndex + 1),
         ];
       });
@@ -111,13 +113,20 @@ export default function EditSnippet({ editSnippet }) {
   };
 
   const handleDeleteStep = (id) => {
-    if (window.confirm("Are you sure you want to delete this code step")) {
+    if (window.confirm('Are you sure you want to delete this code step')) {
       setSteps((prev) => prev.filter((step) => step.id !== id));
     }
   };
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
+      <Button
+        onClick={() => navigate(-1)}
+        className="bg-gray-400 hover:bg-gray-500 mt-2 mb-4"
+      >
+        <FaArrowLeft className="mr-2" /> Back
+      </Button>
+
       <div className="flex flex-col gap-4">
         <div className="flex gap-4">
           <label className="w-12" htmlFor="title">
