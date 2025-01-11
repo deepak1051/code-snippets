@@ -76,6 +76,9 @@ export default function SingleSnippetPage() {
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-2xl font-bold text-blue-600">
             {data.title}
+            <span className="text-xs text-white bg-orange-600 p-2 rounded mx-2 ">
+              {data?.author?.name || 'ADMIN'}
+            </span>
           </CardTitle>
           <div className="flex gap-2">
             <Link to={`/snippets/${data._id}/edit`}>

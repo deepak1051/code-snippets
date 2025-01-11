@@ -3,7 +3,7 @@ import { userTypes } from '../../models/User.js';
 
 export const getAllSnippets = async (req, res) => {
   try {
-    const snippets = await Snippet.find({});
+    const snippets = await Snippet.find({}).populate('author');
 
     return res.status(200).json(snippets);
   } catch (err) {
@@ -63,7 +63,7 @@ export const getSingleSnippet = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const snippet = await Snippet.findById(id);
+    const snippet = await Snippet.findById(id).populate('author');
 
     if (!snippet) return res.status(404).json({ message: 'snippet not found' });
 

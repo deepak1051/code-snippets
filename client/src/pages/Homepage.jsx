@@ -21,6 +21,8 @@ export default function Homepage() {
     queryFn: () => api.get('/snippets').then((res) => res.data),
   });
 
+  console.log('data', data);
+
   if (isPending) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -61,6 +63,9 @@ export default function Homepage() {
                       {snippet.steps?.length !== 1 ? 's' : ''}
                     </div>
                   }
+                  <span className="text-xs text-white bg-orange-600 p-1 rounded ">
+                    {snippet.author?.name || 'ADMIN'}
+                  </span>
                 </CardTitle>
 
                 <Button
