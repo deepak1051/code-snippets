@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import passport from 'passport';
 import authRoutes from './api/auth/auth.route.js';
 import snippetRoutes from './api/snippets/snippets.route.js';
+import categoryRoutes from './api/category/category.route.js';
 
 import './services/passport.js';
 
@@ -28,5 +29,6 @@ app.use(passport.session());
 
 app.use('/', authRoutes);
 app.use('/api/snippets', snippetRoutes);
+app.use('/api/categories', categoryRoutes);
 
 export default app;
