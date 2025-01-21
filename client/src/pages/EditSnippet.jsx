@@ -6,9 +6,10 @@ import { url } from '../App';
 import { nanoid } from 'nanoid';
 import { MdDelete } from 'react-icons/md';
 import { CiSquareChevDown, CiSquareChevUp } from 'react-icons/ci';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { FaArrowLeft } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
+import api from '@/config/api';
 
 const STEP_ADD_TYPE = {
   UP: 'UP',
@@ -22,9 +23,16 @@ export default function EditSnippet({ editSnippet }) {
   const [steps, setSteps] = useState([]);
   const [error, setError] = useState(null);
 
+  const [selectedCategory, setSelectedCategory] = useState('');
+
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
+
+  const categoryQuery = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => api.get('/categories').then((res) => res.data),
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,7 +71,12 @@ export default function EditSnippet({ editSnippet }) {
       return;
     }
 
-    await editSnippetMutation.mutate({ title, steps, _id: id });
+    await editSnippetMutation.mutate({
+      title,
+      steps,
+      _id: id,
+      selectedCategory,
+    });
   };
 
   const handleAddMore = (id = null, type = null) => {
@@ -128,18 +141,33 @@ export default function EditSnippet({ editSnippet }) {
       </Button>
 
       <div className="flex flex-col gap-4">
-        <div className="flex gap-4">
-          <label className="w-12" htmlFor="title">
+        <div className="flex gap-10 items-center p-2 border border-gray-200">
+          <label className="w-12 font-bold text-gray-500" htmlFor="title">
             Title
           </label>
           <input
             type="text"
             name="title"
-            className="border rounded p-2 w-full"
+            className="border rounded p-2 w-full bg-gray-100"
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
+        </div>
+        <div className="flex gap-10 items-center p-2 border border-gray-200">
+          <label className="w-12 mr-2 font-bold text-gray-500" htmlFor="title">
+            Category
+          </label>
+          <select
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="p-2 rounded border cursor-pointer bg-gray-100"
+          >
+            {categoryQuery?.data?.map((cat) => (
+              <option value={cat?._id} id={cat?._id}>
+                {cat?.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="flex flex-col gap-4">
