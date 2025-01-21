@@ -13,7 +13,7 @@ export const getAllSnippets = async (req, res) => {
 
 export const createSnippet = async (req, res) => {
   try {
-    const { title, steps } = req.body;
+    const { title, steps, category } = req.body;
 
     if (!title || !steps) {
       return res.status(400).json({ message: 'all fields are required.' });
@@ -33,6 +33,7 @@ export const createSnippet = async (req, res) => {
     }
 
     const snippet = await Snippet.create({
+      category,
       title,
       steps,
       author: req.user._id,
@@ -76,7 +77,7 @@ export const getSingleSnippet = async (req, res) => {
 export const updateSnippet = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, steps } = req.body;
+    const { title, steps, category } = req.body;
 
     if (!title || !steps) {
       return res.status(400).json({ message: 'all fields are required.' });
@@ -91,7 +92,7 @@ export const updateSnippet = async (req, res) => {
       // Admins can update any snippet
       const snippet = await Snippet.findByIdAndUpdate(
         id,
-        { title, steps },
+        { title, steps, category },
         { new: true }
       );
 
@@ -106,7 +107,7 @@ export const updateSnippet = async (req, res) => {
 
     const snippet = await Snippet.findByIdAndUpdate(
       id,
-      { title, steps },
+      { title, steps, category },
       { new: true }
     );
 
