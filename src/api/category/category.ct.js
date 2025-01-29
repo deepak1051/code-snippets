@@ -1,4 +1,5 @@
 import Category from '../../models/Category.js';
+import Snippet from '../../models/Snippet.js';
 
 export const getAllCategory = async (req, res) => {
   try {
@@ -28,6 +29,19 @@ export const createCategory = async (req, res) => {
     });
 
     return res.status(201).json(category);
+  } catch (error) {
+    return res.status(500).json({ message: 'something went wrong' });
+  }
+};
+
+export const getCategorySnippet = async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+    const categorySnippet = await Snippet.find({
+      category: categoryId,
+    });
+
+    return res.status(201).json(categorySnippet);
   } catch (error) {
     return res.status(500).json({ message: 'something went wrong' });
   }

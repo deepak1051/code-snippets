@@ -23,8 +23,6 @@ export default function EditSnippet({ editSnippet }) {
   const [steps, setSteps] = useState([]);
   const [error, setError] = useState(null);
 
-  const [selectedCategory, setSelectedCategory] = useState('');
-
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
@@ -34,12 +32,16 @@ export default function EditSnippet({ editSnippet }) {
     queryFn: () => api.get('/categories').then((res) => res.data),
   });
 
+  const [selectedCategory, setSelectedCategory] = useState('');
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { data } = await axios.get(`${url}/${id}`);
+
         setTitle(data.title);
         setSteps(data.steps.map((item) => ({ ...item, id: item._id })));
+        setSelectedCategory(data.category || categoryQuery?.data[0]?._id);
       } catch (error) {
         console.log(error);
       }
@@ -48,9 +50,11 @@ export default function EditSnippet({ editSnippet }) {
     fetchData();
   }, [id]);
 
+  console.log('title', title);
+  console.log('selected category', selectedCategory);
+
   const editSnippetMutation = useMutation({
-    mutationFn: ({ title, steps, _id }) =>
-      axios.put(`${url}/${_id}`, { title, steps }),
+    mutationFn: (data) => axios.put(`${url}/${data?._id}`, data),
     onSuccess: () => {
       queryClient.invalidateQueries(['snippets']);
       navigate('/');
@@ -75,7 +79,8 @@ export default function EditSnippet({ editSnippet }) {
       title,
       steps,
       _id: id,
-      selectedCategory,
+      category: selectedCategory,
+      light: 'yagami',
     });
   };
 
@@ -159,11 +164,13 @@ export default function EditSnippet({ editSnippet }) {
             Category
           </label>
           <select
+            value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
             className="p-2 rounded border cursor-pointer bg-gray-100"
           >
+            <option value="">Select Category</option>
             {categoryQuery?.data?.map((cat) => (
-              <option value={cat?._id} id={cat?._id}>
+              <option value={cat?._id} key={cat?._id}>
                 {cat?.name}
               </option>
             ))}

@@ -76,8 +76,11 @@ export const getSingleSnippet = async (req, res) => {
 
 export const updateSnippet = async (req, res) => {
   try {
+    console.log('req body', req.body);
     const { id } = req.params;
     const { title, steps, category } = req.body;
+
+    console.log('data updated ', title, steps, category);
 
     if (!title || !steps) {
       return res.status(400).json({ message: 'all fields are required.' });
