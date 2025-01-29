@@ -49,23 +49,27 @@ export function ProfileDropdown({ user }) {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
             <User />
             <span>Profile</span>
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <CreditCard />
-            <span>Billing</span>
-            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Settings />
-            <span>Settings</span>
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
+          <Link to="/">
+            <DropdownMenuItem className="cursor-pointer">
+              <CreditCard />
+              <span>Home</span>
+              <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </Link>
+          <Link to="/snippets">
+            <DropdownMenuItem className="cursor-pointer">
+              <Settings />
+              <span>All Snippets</span>
+              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </Link>
           <Link to="/my-snippets">
-            <DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">
               <Keyboard />
               <span>My Snippets</span>
               <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>

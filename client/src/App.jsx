@@ -18,7 +18,7 @@ function App() {
         <Header />
         <main className="container mx-auto lg:px-8 py-2 max-w-7xl px-2">
           <Routes>
-            <Route path="/test" element={<Homepage />} />
+            <Route path="/snippets" element={<Homepage />} />
             <Route path="/" element={<CategoryList />} />
             <Route path="/:categoryId" element={<CategoryPage />} />
             <Route path="/categories/new" element={<CreateCategory />} />

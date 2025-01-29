@@ -1,34 +1,42 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { nanoid } from "nanoid";
-import { MdDelete } from "react-icons/md";
-import axios from "axios";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import { Textarea } from "../components/ui/textarea";
-import { Label } from "../components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { nanoid } from 'nanoid';
+import { MdDelete } from 'react-icons/md';
+import axios from 'axios';
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Textarea } from '../components/ui/textarea';
+import { Label } from '../components/ui/label';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '../components/ui/card';
 
 export default function CreateSnippet() {
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
+  const [isDraft, setIsDraft] = useState(false);
   const [error, setError] = useState(null);
   const [steps, setSteps] = useState([]);
 
   const navigate = useNavigate();
 
+  console.log('isDraft', isDraft);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     if (!title || steps.length === 0) {
-      setError("Please add a title and steps");
+      setError('Please add a title and steps');
       return;
     }
 
     try {
-      await axios.post("/api/snippets", { title, steps });
-      navigate("/");
+      await axios.post('/api/snippets', { title, steps, isDraft });
+      navigate('/');
     } catch (error) {
-      console.log("ERROR", error);
+      console.log('ERROR', error);
       setError(error.response.data.message || error.message);
     }
   };
@@ -36,7 +44,7 @@ export default function CreateSnippet() {
   const handleAddMore = () => {
     setSteps((prev) => [
       ...prev,
-      { stepTitle: "", stepCode: "", id: nanoid() },
+      { stepTitle: '', stepCode: '', id: nanoid() },
     ]);
   };
 
@@ -79,13 +87,28 @@ export default function CreateSnippet() {
               />
             </div>
 
+            <div className="flex items-center gap-2 ">
+              <input
+                className=" p-4 h-6 w-6 cursor-pointer"
+                type="checkbox"
+                id="isDraft"
+                checked={isDraft}
+                onChange={(e) => setIsDraft(e.target.checked)}
+              />
+              <Label htmlFor="isDraft" className="cursor-pointer ">
+                Draft Mode
+              </Label>
+            </div>
+
             <div className="flex flex-col gap-4">
               {steps.map((item) => (
                 <Card key={item.id}>
                   <CardContent className="relative flex gap-4 p-4">
                     <div className="flex-1 space-y-4">
                       <div className="space-y-2">
-                        <Label htmlFor={`step-title-${item.id}`}>Step Title</Label>
+                        <Label htmlFor={`step-title-${item.id}`}>
+                          Step Title
+                        </Label>
                         <Input
                           type="text"
                           name="title"
@@ -98,7 +121,9 @@ export default function CreateSnippet() {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor={`step-code-${item.id}`}>Step Code</Label>
+                        <Label htmlFor={`step-code-${item.id}`}>
+                          Step Code
+                        </Label>
                         <Textarea
                           name="code"
                           id={`step-code-${item.id}`}

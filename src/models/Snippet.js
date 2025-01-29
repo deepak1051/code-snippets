@@ -13,6 +13,12 @@ const snippetSchema = new mongoose.Schema({
     required: true,
   },
 
+  isDraft: {
+    type: Boolean,
+    default: false,
+    required: true,
+  },
+
   title: {
     type: String,
     required: true,

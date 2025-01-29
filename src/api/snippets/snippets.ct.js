@@ -3,7 +3,7 @@ import { userTypes } from '../../models/User.js';
 
 export const getAllSnippets = async (req, res) => {
   try {
-    const snippets = await Snippet.find({}).populate('author');
+    const snippets = await Snippet.find({ isDraft: false }).populate('author');
 
     return res.status(200).json(snippets);
   } catch (err) {
@@ -13,7 +13,7 @@ export const getAllSnippets = async (req, res) => {
 
 export const createSnippet = async (req, res) => {
   try {
-    const { title, steps, category } = req.body;
+    const { title, steps, category, isDraft } = req.body;
 
     if (!title || !steps) {
       return res.status(400).json({ message: 'all fields are required.' });
@@ -37,6 +37,7 @@ export const createSnippet = async (req, res) => {
       title,
       steps,
       author: req.user._id,
+      isDraft,
     });
 
     return res.status(201).json(snippet);
@@ -76,11 +77,10 @@ export const getSingleSnippet = async (req, res) => {
 
 export const updateSnippet = async (req, res) => {
   try {
-    console.log('req body', req.body);
     const { id } = req.params;
-    const { title, steps, category } = req.body;
+    const { title, steps, category, isDraft } = req.body;
 
-    console.log('data updated ', title, steps, category);
+    console.log('data updated ', req.body);
 
     if (!title || !steps) {
       return res.status(400).json({ message: 'all fields are required.' });
@@ -95,7 +95,7 @@ export const updateSnippet = async (req, res) => {
       // Admins can update any snippet
       const snippet = await Snippet.findByIdAndUpdate(
         id,
-        { title, steps, category },
+        { title, steps, category, isDraft },
         { new: true }
       );
 
@@ -110,7 +110,7 @@ export const updateSnippet = async (req, res) => {
 
     const snippet = await Snippet.findByIdAndUpdate(
       id,
-      { title, steps, category },
+      { title, steps, category, isDraft },
       { new: true }
     );
 

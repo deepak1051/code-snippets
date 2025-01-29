@@ -10,6 +10,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { FaArrowLeft } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
 import api from '@/config/api';
+import { Label } from '@/components/ui/label';
 
 const STEP_ADD_TYPE = {
   UP: 'UP',
@@ -22,6 +23,7 @@ export default function EditSnippet({ editSnippet }) {
   const [title, setTitle] = useState('');
   const [steps, setSteps] = useState([]);
   const [error, setError] = useState(null);
+  const [isDraft, setIsDraft] = useState(false);
 
   const navigate = useNavigate();
 
@@ -42,6 +44,7 @@ export default function EditSnippet({ editSnippet }) {
         setTitle(data.title);
         setSteps(data.steps.map((item) => ({ ...item, id: item._id })));
         setSelectedCategory(data.category || categoryQuery?.data[0]?._id);
+        setIsDraft(data.isDraft);
       } catch (error) {
         console.log(error);
       }
@@ -49,9 +52,6 @@ export default function EditSnippet({ editSnippet }) {
 
     fetchData();
   }, [id]);
-
-  console.log('title', title);
-  console.log('selected category', selectedCategory);
 
   const editSnippetMutation = useMutation({
     mutationFn: (data) => axios.put(`${url}/${data?._id}`, data),
@@ -81,6 +81,7 @@ export default function EditSnippet({ editSnippet }) {
       _id: id,
       category: selectedCategory,
       light: 'yagami',
+      isDraft,
     });
   };
 
@@ -159,6 +160,22 @@ export default function EditSnippet({ editSnippet }) {
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
+
+        <div className="flex gap-10 items-center p-2 border border-gray-200">
+          <div className="flex items-center gap-2 ">
+            <input
+              className=" p-4 h-6 w-6 cursor-pointer"
+              type="checkbox"
+              id="isDraft"
+              checked={isDraft}
+              onChange={(e) => setIsDraft(e.target.checked)}
+            />
+            <Label htmlFor="isDraft" className="cursor-pointer ">
+              Draft Mode
+            </Label>
+          </div>
+        </div>
+
         <div className="flex gap-10 items-center p-2 border border-gray-200">
           <label className="w-12 mr-2 font-bold text-gray-500" htmlFor="title">
             Category
