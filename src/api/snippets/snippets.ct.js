@@ -3,7 +3,7 @@ import { userTypes } from '../../models/User.js';
 
 export const getAllSnippets = async (req, res) => {
   try {
-    const snippets = await Snippet.find({ isDraft: false }).populate('author');
+    const snippets = await Snippet.find({}).populate('author');
 
     return res.status(200).json(snippets);
   } catch (err) {

@@ -16,7 +16,7 @@ const snippetSchema = new mongoose.Schema({
   isDraft: {
     type: Boolean,
     default: false,
-    required: true,
+    required: false,
   },
 
   title: {
