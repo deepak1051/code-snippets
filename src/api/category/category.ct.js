@@ -25,9 +25,19 @@ export const createCategory = async (req, res) => {
       return res.status(400).json({ message: 'name is required' });
     }
 
+    console.log('req.files', req.files);
+
+    if (!req.files?.image?.[0]) {
+      return res.status(400).json({ message: 'image is required' });
+    }
+
     const files = req.files;
 
     const filePath = files?.image?.[0]?.path;
+
+    const fileName = files?.image?.[0]?.filename;
+
+    console.log('filename', files);
 
     const categoryExist = await Category.findOne({ name });
 
@@ -39,7 +49,7 @@ export const createCategory = async (req, res) => {
 
     const category = await Category.create({
       name,
-      image: filePath,
+      image: fileName,
     });
 
     return res.status(201).json(category);
@@ -59,6 +69,22 @@ export const getCategorySnippet = async (req, res) => {
     });
 
     return res.status(201).json(categorySnippet);
+  } catch (error) {
+    return res.status(500).json({ message: 'something went wrong' });
+  }
+};
+
+export const getCategoryDetail = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    console.log('categoryId', id);
+
+    const category = await Category.findById(id);
+
+    console.log('category', category);
+
+    return res.status(200).json(category);
   } catch (error) {
     return res.status(500).json({ message: 'something went wrong' });
   }

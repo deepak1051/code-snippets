@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import {
   createCategory,
   getAllCategory,
+  getCategoryDetail,
   getCategorySnippet,
 } from './category.ct.js';
 import multer from 'multer';
@@ -37,7 +38,9 @@ const upload = multer({
 
 router.get('/', getAllCategory);
 
-router.get('/:categoryId', getCategorySnippet);
+router.get('/:categoryId/snippets', getCategorySnippet);
+
+router.get('/:id', getCategoryDetail);
 
 router.post(
   '/',

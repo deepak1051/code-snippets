@@ -22,8 +22,6 @@ export default function CreateSnippet() {
 
   const navigate = useNavigate();
 
-  console.log('isDraft', isDraft);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);

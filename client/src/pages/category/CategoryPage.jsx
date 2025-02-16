@@ -1,7 +1,3 @@
-// export default function CategoryPage() {
-//   return <div>CategoryPage</div>;
-// }
-
 import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
@@ -10,16 +6,14 @@ import { FaArrowLeft } from 'react-icons/fa';
 import api from '@/config/api';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import CreateCategory from './CreateCategory';
 
 export default function CategoryPage() {
-  // const { data: currentUserData } = useQuery({
-  //   queryKey: ['current_user'],
-  //   queryFn: () => api.get('/current_user').then((res) => res.data),
-  // });
   const { categoryId } = useParams();
   const { data, isError, isPending, error } = useQuery({
     queryKey: ['categories', categoryId],
-    queryFn: () => api.get(`/categories/${categoryId}`).then((res) => res.data),
+    queryFn: () =>
+      api.get(`/categories/${categoryId}/snippets`).then((res) => res.data),
   });
 
   const navigate = useNavigate();
@@ -50,6 +44,11 @@ export default function CategoryPage() {
           Browse through the collection of code snippets or create your own.
         </p>
       </div>
+
+      <div>
+        <CreateCategory categoryId={categoryId} />
+      </div>
+
       <div className="grid gap-4">
         {data?.map((snippet) => (
           <Link to={`/snippets/${snippet._id}`} key={snippet._id}>
