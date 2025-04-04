@@ -29,13 +29,6 @@ export default function EditSnippet({ editSnippet }) {
 
   const queryClient = useQueryClient();
 
-  const categoryQuery = useQuery({
-    queryKey: ['categories'],
-    queryFn: () => api.get('/categories').then((res) => res.data),
-  });
-
-  const [selectedCategory, setSelectedCategory] = useState('');
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -43,7 +36,7 @@ export default function EditSnippet({ editSnippet }) {
 
         setTitle(data.title);
         setSteps(data.steps.map((item) => ({ ...item, id: item._id })));
-        setSelectedCategory(data.category || categoryQuery?.data[0]?._id);
+
         setIsDraft(data.isDraft);
       } catch (error) {
         console.log(error);
@@ -60,7 +53,6 @@ export default function EditSnippet({ editSnippet }) {
       navigate('/');
     },
     onError: (error) => {
-      console.log('ERROR', error);
       setError(error.response.data.message || error.message);
     },
   });
@@ -79,8 +71,6 @@ export default function EditSnippet({ editSnippet }) {
       title,
       steps,
       _id: id,
-      category: selectedCategory,
-      light: 'yagami',
       isDraft,
     });
   };
@@ -174,24 +164,6 @@ export default function EditSnippet({ editSnippet }) {
               Draft Mode
             </Label>
           </div>
-        </div>
-
-        <div className="flex gap-10 items-center p-2 border border-gray-200">
-          <label className="w-12 mr-2 font-bold text-gray-500" htmlFor="title">
-            Category
-          </label>
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="p-2 rounded border cursor-pointer bg-gray-100"
-          >
-            <option value="">Select Category</option>
-            {categoryQuery?.data?.map((cat) => (
-              <option value={cat?._id} key={cat?._id}>
-                {cat?.name}
-              </option>
-            ))}
-          </select>
         </div>
 
         <div className="flex flex-col gap-4">

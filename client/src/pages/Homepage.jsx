@@ -1,38 +1,20 @@
 import { useQuery } from '@tanstack/react-query';
+import { FiChevronRight } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
-import api from '../config/api';
+import { Button } from '../components/ui/button';
 import {
   Card,
+  CardContent,
   CardHeader,
   CardTitle,
-  CardContent,
 } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { FiChevronRight } from 'react-icons/fi';
-import { FaArrowLeft } from 'react-icons/fa';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { useState } from 'react';
+import api from '../config/api';
 
 export default function Homepage() {
-  const [selectedCategory, setSelectedCategory] = useState('all');
-
   const { data, isError, isPending, error } = useQuery({
     queryKey: ['snippets'],
     queryFn: () => api.get('/snippets').then((res) => res.data),
   });
-
-  const { data: categories, isPending: categoriesPending } = useQuery({
-    queryKey: ['categories'],
-    queryFn: () => api.get('/categories').then((res) => res.data),
-  });
-
-  console.log('data', data);
 
   const navigate = useNavigate();
 
@@ -52,21 +34,6 @@ export default function Homepage() {
     );
   }
 
-  console.log('data', data);
-
-  const handleCategoryChange = (value) => {
-    console.log(value);
-
-    setSelectedCategory(value);
-  };
-  const filteredSnippets = data.filter((snippet) => {
-    if (selectedCategory === 'all') {
-      return true;
-    } else {
-      return snippet.category === selectedCategory;
-    }
-  });
-
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-2">
@@ -78,25 +45,8 @@ export default function Homepage() {
         </p>
       </div>
 
-      <div>
-        <Select onValueChange={handleCategoryChange}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Category" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All</SelectItem>
-
-            {categories?.map((category) => (
-              <SelectItem key={category._id} value={category._id}>
-                {category.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
       <div className="grid gap-4">
-        {filteredSnippets?.map((snippet) => (
+        {data?.map((snippet) => (
           <Link to={`/snippets/${snippet._id}`} key={snippet._id}>
             <Card className="group hover:shadow-md transition-all  cursor-pointer">
               <CardHeader className="flex flex-row items-center justify-between   py-4">

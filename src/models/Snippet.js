@@ -1,12 +1,6 @@
 import mongoose from 'mongoose';
 
 const snippetSchema = new mongoose.Schema({
-  category: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category',
-    required: false,
-  },
-
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

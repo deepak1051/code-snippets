@@ -3,10 +3,18 @@ import { userTypes } from '../../models/User.js';
 
 export const getAllSnippets = async (req, res) => {
   try {
-    const snippets = await Snippet.find({}).populate('author');
+    const { page = 1, limit = 10 } = req.query;
+
+    const skipPage = (page - 1) * limit;
+
+    const snippets = await Snippet.find({})
+      .limit(limit)
+      .skip(skipPage)
+      .populate('author');
 
     return res.status(200).json(snippets);
   } catch (err) {
+    console.log(err);
     return res.status(500).json({ message: 'something went wrong' });
   }
 };

@@ -2,12 +2,12 @@ import cookieSession from 'cookie-session';
 import cors from 'cors';
 import express from 'express';
 import morgan from 'morgan';
+import path from 'node:path';
 import passport from 'passport';
+import { fileURLToPath } from 'url';
 import authRoutes from './api/auth/auth.route.js';
 import snippetRoutes from './api/snippets/snippets.route.js';
-import categoryRoutes from './api/category/category.route.js';
-import { fileURLToPath } from 'url';
-import path from 'node:path';
+import razorpayRoutes from './api/razorpay/index.js';
 
 import './services/passport.js';
 
@@ -35,6 +35,6 @@ app.use(passport.session());
 
 app.use('/', authRoutes);
 app.use('/api/snippets', snippetRoutes);
-app.use('/api/categories', categoryRoutes);
+app.use('/api/orders', razorpayRoutes);
 
 export default app;
